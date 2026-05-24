@@ -2,8 +2,9 @@ import React from "react";
 import "../styles/Projects.css";
 import "../styles/HardwareProjects.css";
 import FolderOpenRoundedIcon from "@mui/icons-material/FolderOpenRounded";
+import OpenInNewRoundedIcon from "@mui/icons-material/OpenInNewRounded";
 import FadeInSection from "./FadeInSection";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const hardwareProjects = {
   "Custom Build PC": {
@@ -17,10 +18,20 @@ const hardwareProjects = {
     techStack: "RP2040, WS2812B, MAX4466, LiPo",
     link: "/hardware/led-bracelet",
     image: "/assets/hardware/led-bracelet/cover.PNG"
+  },
+  "Grass Cyberdeck": {
+    desc: "A Raspberry Pi retro gaming console built inside a wooden keepsake box, decorated with preserved moss to look like a tiny terrarium.",
+    techStack: "Raspberry Pi 3B+, PiSugar 3 Plus, Hosyond 5\" DSI, RetroPie",
+    link: "/hardware/grass-cyberdeck",
+    image: "/assets/hardware/grass-cyberdeck/cover.PNG",
+    imageStyle: { objectFit: "contain", padding: "12px" },
+    badge: { text: "Teen Vogue feature", href: "https://www.teenvogue.com/story/diy-cyberdecks-newest-analog-trend-taking-social-media" }
   }
 };
 
 const HardwareProjects = () => {
+  const navigate = useNavigate();
+
   return (
     <div id="hardware-projects">
       <div className="section-header">
@@ -28,16 +39,19 @@ const HardwareProjects = () => {
       </div>
       <div className="project-container">
         <ul className="projects-grid">
-          {Object.keys(hardwareProjects).map((key, i) => (
-            <FadeInSection key={i} delay={(i + 1) * 100 + "ms"}>
-              <Link to={hardwareProjects[key]["link"]} className="project-card-link">
-                <li className={`projects-card ${key === "Custom Build PC" || key === "LED Sound Reactive Bracelet" ? "transparent-card" : ""}`}>
-                  {hardwareProjects[key]["image"] && (
+          {Object.keys(hardwareProjects).map((key, i) => {
+            const project = hardwareProjects[key];
+            return (
+              <FadeInSection key={i} delay={(i + 1) * 100 + "ms"}>
+                <li
+                  className={`projects-card ${project.image ? "transparent-card" : ""}`}
+                  onClick={() => navigate(project.link)}
+                >
+                  {project.image ? (
                     <div className="project-image-container">
-                      <img src={hardwareProjects[key]["image"]} alt={key} className="project-image" />
+                      <img src={project.image} alt={key} className="project-image" style={project.imageStyle || {}} />
                     </div>
-                  )}
-                  {!hardwareProjects[key]["image"] && (
+                  ) : (
                     <div className="card-header">
                       <div className="folder-icon">
                         <FolderOpenRoundedIcon sx={{ fontSize: 35 }} />
@@ -45,13 +59,25 @@ const HardwareProjects = () => {
                     </div>
                   )}
                   <div className="card-title">{key}</div>
-                  <div className="card-desc">{hardwareProjects[key]["desc"]}</div>
+                  {project.badge && (
+                    <a
+                      href={project.badge.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="card-badge-link"
+                      onClick={e => e.stopPropagation()}
+                    >
+                      {project.badge.text}
+                      <OpenInNewRoundedIcon sx={{ fontSize: 12, display: "block" }} />
+                    </a>
+                  )}
+                  <div className="card-desc">{project.desc}</div>
                   <div className="full-log-link">Full project log</div>
-                  <div className="card-tech">{hardwareProjects[key]["techStack"]}</div>
+                  <div className="card-tech">{project.techStack}</div>
                 </li>
-              </Link>
-            </FadeInSection>
-          ))}
+              </FadeInSection>
+            );
+          })}
         </ul>
       </div>
     </div>

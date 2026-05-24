@@ -120,6 +120,25 @@
   padding-bottom: 40px;
 }
 
+.project-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "NTR", sans-serif;
+  font-size: 14px;
+  color: var(--green-bright);
+  border: 1px solid var(--green-bright);
+  border-radius: 4px;
+  padding: 4px 10px;
+  text-decoration: none;
+  margin-bottom: 16px;
+  transition: background 0.2s;
+}
+
+.project-badge:hover {
+  background: rgba(100, 255, 218, 0.08);
+}
+
 .card-tech {
   font-family: "NTR", sans-serif;
   color: var(--slate);

@@ -67,6 +67,28 @@
   transform: scale(1.05);
 }
 
+.card-badge-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: "NTR", sans-serif;
+  font-size: 14px;
+  color: var(--yellow);
+  text-decoration: none;
+  opacity: 0.85;
+  transition: opacity 0.2s;
+  margin-bottom: 8px;
+}
+
+.card-badge-link:hover {
+  opacity: 1;
+}
+
+.card-badge-icon {
+  font-size: 12px !important;
+  display: flex;
+}
+
 @media only screen and (max-width: 600px) {
   #hardware-projects {
     padding: 60px 0;

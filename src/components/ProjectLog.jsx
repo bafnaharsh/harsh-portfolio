@@ -106,6 +106,67 @@ const projectLogs = {
       }
     ]
   },
+  "grass-cyberdeck": {
+    title: "A moss-covered cyberdeck build.",
+    date: "May 2026",
+    description: "I wanted a tiny computer that played old Pokemon, lived inside a wooden box, and looked like something a forest witch would own if forest witches did retro emulation.",
+    badge: { text: "Featured in Teen Vogue", href: "https://www.teenvogue.com/story/diy-cyberdecks-newest-analog-trend-taking-social-media" },
+    image: "/assets/hardware/grass-cyberdeck/header.JPG",
+    imageCaption: "the first time it booted Pokemon, lid open, moss not even glued in yet",
+    heroStyle: { maxWidth: "60%", margin: "40px auto" },
+    logs: [
+      {
+        title: "0. where it started",
+        content: [
+          { type: "text", value: "I didn't set out to build a \"cyberdeck.\" I set out to play Pokemon Red in a way that felt like mine. Everyone has the games on their phone. That's exactly why I didn't want them on my phone. I wanted to open a little wooden box, see a screen glow up out of a bed of moss, and play the same game I played as a kid but through something I'd actually made with my hands." },
+          { type: "text", value: "I'm not a hardware person. The plan was an 8 x 5 x 3 inch wooden keepsake box (the kind sold for jewelry), stuffed with just enough computer to run Game Boy games, and decorated like a tiny terrarium." },
+          { type: "text", value: "A handheld that's also a houseplant." }
+        ]
+      },
+      {
+        title: "1. the parts",
+        content: [
+          { type: "text", value: "I'm listing these the way I wish someone had explained them to me, because I bought the wrong version of two things before I understood what I was looking at." },
+          { type: "list", items: [
+            "The brain: Raspberry Pi 3B+. I started out wanting the tiny Pi Zero 2W, and honestly it would have run Pokemon fine. I switched to the 3B+ because the power board I wanted attaches more reliably to it, and because I figured I might want the headroom later.",
+            "The power: PiSugar 3 Plus. This is the part that makes it portable. It's a 5000mAh battery that clips onto the back of the Pi using little spring-loaded pogo pins (no soldering, no GPIO pins used up). It charges over USB-C and does a clean safe-shutdown so you don't corrupt your save file by yanking the power. This gets you something like 8–10 hours.",
+            "The screen: Hosyond 5\" DSI touchscreen. Connects to the Pi with a flat ribbon cable instead of a bulky HDMI plug, which matters a lot when you're trying to close a small lid. More on the word \"touchscreen\" later.",
+            "The keyboard: Rii Mini Bluetooth keyboard. About the size of a deck of cards. The keys are tiny. You're not writing essays on this. You're typing the occasional command. It's perfect for that and miserable for anything more.",
+            "The controller: 8BitDo Micro. A pocket-sized Bluetooth gamepad. This is what you actually play with. It's the size of a stick of gum and it's genuinely good.",
+            "The decoration: preserved reindeer moss and sheet moss. Two kinds. Flat moss as a carpet, fluffy moss to fill the corners.",
+            "The box: a wood keepsake box with a Tree of Life carved into the lid, which felt thematically perfect for something I was about to fill with moss."
+          ]}
+        ]
+      },
+      {
+        title: "2. the layout",
+        content: [
+          { type: "text", value: "There's no real \"circuit\" here the way a soldered project has one. That's the funny thing about this build. Once I dropped the idea of a wired voltmeter, almost every connection is either a clip-on or wireless." },
+          { type: "diagram", value: "LID  ┌───────────────────────────────┐\n     │   [ Hosyond 5\" screen ]        │\n     └───────────────┬───────────────┘\n                     │ DSI ribbon cable\n                     │ (round the hinge)\nBASE ┌───────────────┴───────────────┐\n     │  [ Pi 3B+ ]                    │\n     │     ↑ pogo pins (no cable)     │\n     │  [ PiSugar 3 Plus battery ]    │\n     │     ↑ USB-C charging           │\n     │                                │\n     │  ((( Bluetooth )))             │\n     │     → Rii keyboard             │\n     │     → 8BitDo Micro             │\n     │     → headphones               │\n     │                                │\n     │  moss everywhere else          │\n     └────────────────────────────────┘" },
+          { type: "text", value: "Screen in the lid, brain in the base, ribbon cable bending around the hinge between them, everything else talking over Bluetooth or just sitting there looking nice." }
+        ]
+      },
+      {
+        title: "3. things that went wrong",
+        content: [
+          { type: "text", value: "The assembly plan was clean. Reality was not. Here's the actual order things went wrong, because the wrong turns are the only useful part of a build log." },
+          { type: "text", value: "The card reader: My MacBook has an SD slot but my microSD didn't come with the adapter, and I didn't own a USB stick either. The entire project sat in a pile on my desk for two days waiting on an $8 dongle. Order the boring connecting parts first, before the exciting parts, because the exciting parts are useless without them." },
+          { type: "text", value: "The ribbon cable was too short: The screen came with a 10cm DSI cable. That sounds like plenty until you remember the screen is in the lid and the Pi is in the base and the cable has to bend around a hinge. 10cm pulled tight. I had to order a 20cm one and wait again." },
+          { type: "text", value: "The WiFi nearly broke me: The Pi refused to connect, wouldn't even scan for networks. The answer was that the Pi won't touch WiFi at all until you set the WLAN country code. One setting buried in a menu. Once I set it to US and dropped a wifikeyfile.txt onto the boot partition, it grabbed an IP address on the next reboot." },
+          { type: "text", value: "The keyboard pretended to charge: I plugged the keyboard into the Pi to use it over USB and it just glowed red and did nothing as an input. Turns out red meant charging, not connecting. It needed to be switched into the right mode." },
+          { type: "text", value: "And then, after all of it (the card reader, the cable, the touch dead-end, the WiFi country code, the keyboard mode), I dragged a Pokemon Red file into a folder over my home network, restarted the menu, and there it was. Game Boy category. One game in it. I pressed A on a gamepad the size of my thumb and the title screen came up on a screen sitting in a wooden box on my desk." },
+        ]
+      },
+      {
+        title: "4. why a cyberdeck, though",
+        content: [
+          { type: "text", value: "The word \"cyberdeck\" comes from cyberpunk fiction. In William Gibson's Neuromancer, a \"deck\" was the console hackers jacked into to enter cyberspace. I wrote my grade 12 English paper on that book, so when the maker community claimed the name, it already felt like mine. They ran with it, and now a cyberdeck means a custom-built, often deliberately rugged or weird personal computer. Not a laptop. Not a thing you bought. A thing you assembled, that does exactly what you want and nothing you don't, and that looks like you." },
+          { type: "text", value: "That's the actual appeal, and it took building one to feel it. Every device I own is a sealed black rectangle. I can't open my phone. I can't see how my laptop works. They're all identical to everyone else's and designed to be replaced, not repaired, not understood. A cyberdeck is the opposite of that on every axis. It shows its seams. You can open it. When something breaks you fix the specific thing that broke." },
+          { type: "text", value: "And then there's the moss, which is the part people raise an eyebrow at. Cyberpunk is usually all chrome and neon and rain. But I kept thinking about the opposite: what tech looks like when something living grows over it. There's a whole softer cousin of cyberpunk called solarpunk that's about exactly this: technology and nature not at war. A circuit board in a bed of moss isn't a contradiction. It's a little argument that the future doesn't have to be cold. My computer has a houseplant in it. I think that's the most honest thing I've ever built." }
+        ]
+      },
+    ]
+  },
   "led-bracelet": {
     title: "a Sound-Reactive LED Bracelet",
     date: "April 2026",
@@ -256,7 +317,7 @@ const ProjectLog = () => {
           <h1 className="project-log-title">{project.title}</h1>
           
           {project.image && (
-            <div className="project-log-hero-wrapper">
+            <div className="project-log-hero-wrapper" style={project.heroStyle || {}}>
               <div className="project-log-hero-container">
                 <img src={project.image} alt={project.title} className="project-log-hero" />
               </div>
@@ -267,6 +328,16 @@ const ProjectLog = () => {
           )}
 
           <p className="project-log-description">{project.description}</p>
+          {project.badge && (
+            <a
+              href={project.badge.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="project-badge"
+            >
+              {project.badge.text}
+            </a>
+          )}
           {project.date && <div className="project-log-date">{project.date}</div>}
         </div>
       </FadeInSection>

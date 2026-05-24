@@ -107,7 +107,7 @@ const projectLogs = {
     ]
   },
   "grass-cyberdeck": {
-    title: "A moss-covered cyberdeck build.",
+    title: "Grass Cyberdeck build",
     date: "May 2026",
     description: "I wanted a tiny computer that played old Pokemon, lived inside a wooden box, and looked like something a forest witch would own if forest witches did retro emulation.",
     badge: { text: "Featured in Teen Vogue", href: "https://www.teenvogue.com/story/diy-cyberdecks-newest-analog-trend-taking-social-media" },

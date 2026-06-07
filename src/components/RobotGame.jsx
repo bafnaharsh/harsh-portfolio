@@ -135,7 +135,17 @@ function drawBrainCell(ctx, ex, ey, scrollY, idx) {
   ctx.restore();
 }
 
-function generateCellLayout(nb, vw) {
+function generateCellLayout(nb, vw, avoidZones = []) {
+  const clearZone = (docY) => {
+    let y = docY;
+    for (let pass = 0; pass < 8; pass++) {
+      const hit = avoidZones.find((z) => y - 20 < z.bot && y + BLOCK_H + 4 > z.top);
+      if (!hit) break;
+      y = hit.bot + 10;
+    }
+    return y;
+  };
+
   const cLeft  = Math.max(0, (vw - 1000) / 2);
   const cRight = Math.min(vw - 40, cLeft + 1000);
 
@@ -167,18 +177,18 @@ function generateCellLayout(nb, vw) {
   });
 
   yZones.forEach(([yMin, yMax], i) => {
-    const ledgeDocY = yMin + Math.random() * (yMax - yMin);
+    const ledgeDocY = clearZone(yMin + Math.random() * (yMax - yMin));
     const cellX     = shuffled[i];
     const approachY = ledgeDocY + 80;
 
     cells.push({ x: cellX, docY: ledgeDocY - 16, collected: false });
     extraLedges.push(mk(cellX - 8, ledgeDocY, 72));
 
-    if (cellX <= 300) return;
+    if (cellX <= 230) return;
 
-    let x     = 380;
+    let x     = 230;
     let count = 0;
-    const maxChain = cellX > cRight - 20 ? 12 : 5;
+    const maxChain = cellX > cRight - 20 ? 14 : 8;
     while (x + 80 < cellX && count < maxChain) {
       extraLedges.push(mk(x, approachY, 68));
       x    += 90;
@@ -192,7 +202,7 @@ function generateCellLayout(nb, vw) {
 const PLATFORM_SELECTORS = [
   ".section-title", ".intro-title", ".intro-desc",
   ".intro-contact", ".joblist-job-title", ".joblist-job-company",
-  ".joblist-duration", ".job-description", ".card-title", ".ending-credits",
+  ".card-title", ".ending-credits",
   "h3", "p", "li",
 ];
 
@@ -225,7 +235,7 @@ const RobotGame = ({ active }) => {
     PLATFORM_SELECTORS.forEach((sel) => {
       document.querySelectorAll(sel).forEach((el) => {
         const r = el.getBoundingClientRect();
-        if (r.width < 60) return;
+        if (r.width < 60 || r.height > 100) return;
         const docTop = r.top + scrollY;
         if (docTop > scrollY + window.innerHeight + 200 || docTop + r.height < scrollY - 200) return;
         platforms.push({ x: r.left, y: docTop, w: r.width });
@@ -249,15 +259,14 @@ const RobotGame = ({ active }) => {
     frameRef.current = 0;
     setCellsCollected(0);
 
-    const { cells, extraLedges } = generateCellLayout(nb, canvas.width);
-    cellsRef.current = cells;
-
-    const textZones = [];
+    const allDomZones  = [];
+    const textZones    = [];
     PLATFORM_SELECTORS.forEach((sel) => {
       document.querySelectorAll(sel).forEach((el) => {
         const r = el.getBoundingClientRect();
-        if (r.width < 60 || r.height < 4 || r.height > 55) return;
-        textZones.push({ top: r.top - 4, bot: r.bottom + 4 });
+        if (r.width < 60 || r.height < 4) return;
+        allDomZones.push({ top: r.top - 4, bot: r.bottom + 4 });
+        if (r.height <= 55) textZones.push({ top: r.top - 4, bot: r.bottom + 4 });
       });
     });
     const adjustForText = (docY) => {
@@ -269,6 +278,9 @@ const RobotGame = ({ active }) => {
       }
       return y;
     };
+
+    const { cells, extraLedges } = generateCellLayout(nb, canvas.width, allDomZones);
+    cellsRef.current = cells;
 
     const mkS = (b) => ({ ...b, isSpawn: false, isGoal: false, alpha: 0, revealed: false });
 

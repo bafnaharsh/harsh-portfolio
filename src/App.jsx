@@ -64,7 +64,7 @@ function App() {
               <span className="robot-game-key">scroll</span>
               <span>explore</span>
             </div>
-            <div className="robot-game-info-goal">reach the bottom to win</div>
+            <div className="robot-game-info-goal">collect your scattered brain cells</div>
           </div>
         )}
       </div>

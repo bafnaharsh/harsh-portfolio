@@ -44,3 +44,52 @@
   flex: 1 1 auto;
   min-height: 0;
 }
+
+/* Shareable-link row. Sits between the title bar and the PDF so the viewer
+   can copy the deep link without leaving the preview. */
+.pdf-viewer-share {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  background: var(--dark-navy);
+  border-bottom: 1px solid rgba(100, 255, 218, 0.12);
+  flex: 0 0 auto;
+}
+
+.pdf-viewer-share-icon {
+  color: var(--green-bright);
+  flex: 0 0 auto;
+}
+
+.pdf-viewer-share-url {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 13px;
+  color: var(--slate);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pdf-viewer-share-btn {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--green-bright);
+  background-color: transparent;
+  color: var(--green-bright);
+  font-family: "NTR", sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.pdf-viewer-share-btn:hover {
+  background-color: var(--green-tint);
+  color: var(--lightest-slate);
+}

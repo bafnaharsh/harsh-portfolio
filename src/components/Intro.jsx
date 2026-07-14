@@ -3,9 +3,9 @@ import "../styles/Intro.css";
 import { TypeAnimation } from "react-type-animation";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import ArticleRoundedIcon from "@mui/icons-material/ArticleRounded";
-import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import FadeInSection from "./FadeInSection";
 import AsciiPortrait from "./AsciiPortrait";
+import PdfViewerModal from "./PdfViewerModal";
 
 const Intro = () => {
   const [showResume, setShowResume] = useState(false);
@@ -47,23 +47,12 @@ const Intro = () => {
           </div>
         </FadeInSection>
         {showResume && (
-          <div className="pdf-viewer-overlay" onClick={() => setShowResume(false)}>
-            <div className="pdf-viewer-modal" onClick={(event) => event.stopPropagation()}>
-              <button
-                className="pdf-viewer-close"
-                type="button"
-                onClick={() => setShowResume(false)}
-                aria-label="Close resume viewer"
-              >
-                <CloseRoundedIcon />
-              </button>
-              <iframe
-                title="Resume PDF"
-                src="/HarshBafna.pdf"
-                className="pdf-viewer-frame"
-              />
-            </div>
-          </div>
+          <PdfViewerModal
+            title="Resume — Harsh Bafna"
+            src="/HarshBafna.pdf"
+            shareUrl={`${window.location.origin}/resume`}
+            onClose={() => setShowResume(false)}
+          />
         )}
       </div>
     </div>

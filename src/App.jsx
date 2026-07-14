@@ -7,6 +7,7 @@ import Education from "./components/Education";
 import Photography from "./components/Photography";
 import PhotographyGallery from "./components/PhotographyGallery";
 import CertificateViewer from "./components/CertificateViewer";
+import ResumeViewer from "./components/ResumeViewer";
 import Credits from "./components/Credits";
 import NavBar from "./components/NavBar";
 import RobotGame from "./components/RobotGame";
@@ -85,6 +86,7 @@ function App() {
           />
           <Route path="/photography" element={<PhotographyGallery />} />
           <Route path="/cert/:slug" element={<CertificateViewer />} />
+          <Route path="/resume" element={<ResumeViewer />} />
         </Routes>
       </div>
     </div>

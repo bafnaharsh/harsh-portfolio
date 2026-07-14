@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import "../styles/Projects.css";
+import "../styles/Certificates.css";
 import StorageRoundedIcon from "@mui/icons-material/StorageRounded";
 import TravelExploreRoundedIcon from "@mui/icons-material/TravelExploreRounded";
 import MarkEmailReadRoundedIcon from "@mui/icons-material/MarkEmailReadRounded";
@@ -7,7 +8,10 @@ import CrisisAlertRoundedIcon from "@mui/icons-material/CrisisAlertRounded";
 import ShowChartRoundedIcon from "@mui/icons-material/ShowChartRounded";
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
+import NorthEastRoundedIcon from "@mui/icons-material/NorthEastRounded";
 import FadeInSection from "./FadeInSection";
+import PdfViewerModal from "./PdfViewerModal";
+import { certificates } from "../data/certificates";
 
 const projects = [
   {
@@ -81,6 +85,7 @@ const useVisibleCount = () => {
 const Projects = () => {
   const visibleCount = useVisibleCount();
   const [index, setIndex] = useState(0);
+  const [activeCert, setActiveCert] = useState(null);
   const canSlide = projects.length > visibleCount;
 
   // Furthest the first visible card can go without revealing empty space.
@@ -110,7 +115,7 @@ const Projects = () => {
   return (
     <div id="projects">
       <div className="section-header">
-        <span className="section-title">/ software &amp; projects</span>
+        <span className="section-title">/ software &amp; certifications</span>
       </div>
       <div className="project-container">
         <div className="projects-carousel-shell">
@@ -170,6 +175,43 @@ const Projects = () => {
           )}
         </div>
       </div>
+
+      <FadeInSection>
+        <div className="cert-block">
+          <div className="cert-block-label">certifications</div>
+          <div className="cert-pills">
+            {certificates.map((cert) => {
+              const CertIcon = cert.icon;
+              return (
+                <button
+                  key={cert.slug}
+                  type="button"
+                  className="cert-pill"
+                  onClick={() => setActiveCert(cert)}
+                  title={`View ${cert.title} certificate`}
+                >
+                  <span className="cert-pill-icon">
+                    <CertIcon sx={{ fontSize: 18 }} />
+                  </span>
+                  <span className="cert-pill-name">{cert.title}</span>
+                  <span className="cert-pill-issuer">{cert.issuer}</span>
+                  <span className="cert-pill-arrow">
+                    <NorthEastRoundedIcon sx={{ fontSize: 15 }} />
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </FadeInSection>
+
+      {activeCert && (
+        <PdfViewerModal
+          title={`${activeCert.title} — ${activeCert.issuer}`}
+          src={activeCert.file}
+          onClose={() => setActiveCert(null)}
+        />
+      )}
     </div>
   );
 };

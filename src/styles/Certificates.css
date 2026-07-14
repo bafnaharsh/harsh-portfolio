@@ -1,0 +1,279 @@
+/* ================================================================== */
+/* Certificates                                                        */
+/* Two consumers: the homepage pills (under the projects carousel in   */
+/* Projects.jsx) and the standalone /cert/:slug page (CertificateViewer)*/
+/* ================================================================== */
+
+/* ---------- Shared layout ---------- */
+.cert-page {
+  margin: auto;
+  max-width: 1000px;
+  padding: 100px 0 60px;
+}
+
+/* ---------- Homepage: cert pills ---------- */
+.cert-block {
+  margin-top: 48px;
+}
+
+.cert-block-label {
+  font-family: "NTR", sans-serif;
+  font-size: 15px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--slate);
+  margin-bottom: 16px;
+}
+
+.cert-block-hint {
+  margin-top: 14px;
+  font-family: "NTR", sans-serif;
+  font-size: 13px;
+  color: var(--slate);
+}
+
+.cert-block-hint code {
+  font-family: "SFMono-Regular", Consolas, monospace;
+  color: var(--green-bright);
+  background-color: var(--light-navy);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.cert-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* The pill itself. Styled as an obviously-clickable chip: green border,  */
+/* lift on hover, cursor pointer, and an external-link glyph that slides  */
+/* in on hover to signal interactivity.                                   */
+.cert-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--green-bright);
+  background-color: var(--light-navy);
+  color: var(--lightest-slate);
+  font-family: "NTR", sans-serif;
+  font-size: 16px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease,
+    color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cert-pill-icon {
+  color: var(--green-bright);
+  display: inline-flex;
+  transition: transform 0.2s ease;
+}
+
+.cert-pill-issuer {
+  color: var(--slate);
+  font-size: 13px;
+}
+
+.cert-pill-arrow {
+  color: var(--green-bright);
+  display: inline-flex;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.cert-pill:hover,
+.cert-pill:focus-visible {
+  background-color: var(--green-tint);
+  color: var(--green-bright);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(2, 12, 27, 0.4);
+  outline: none;
+}
+
+.cert-pill:hover .cert-pill-icon,
+.cert-pill:focus-visible .cert-pill-icon {
+  transform: scale(1.1);
+}
+
+.cert-pill:hover .cert-pill-arrow,
+.cert-pill:focus-visible .cert-pill-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ---------- Standalone /cert/:slug page ---------- */
+.cert-page-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 24px;
+}
+
+.cert-page-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  border: 1px solid var(--green-bright);
+  background-color: var(--light-navy);
+  color: var(--green-bright);
+}
+
+.cert-page-icon svg {
+  font-size: 26px;
+}
+
+.cert-page-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.cert-page-title {
+  font-family: "NTR", sans-serif;
+  color: var(--lightest-slate);
+  font-size: 30px;
+  font-weight: bold;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.cert-page-issuer {
+  font-family: "NTR", sans-serif;
+  color: var(--green-bright);
+  font-size: 16px;
+}
+
+.cert-page-open {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--green-bright);
+  color: var(--green-bright);
+  font-family: "NTR", sans-serif;
+  font-size: 15px;
+  text-decoration: none;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.cert-page-open:hover {
+  background-color: var(--green-tint);
+  transform: translateY(-2px);
+}
+
+.cert-page-frame-wrap {
+  width: 100%;
+  height: 80vh;
+  min-height: 600px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(100, 255, 218, 0.12);
+  background: var(--navy);
+  box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+}
+
+.cert-page-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+.cert-not-found {
+  font-family: "NTR", sans-serif;
+  color: var(--slate);
+  font-size: 18px;
+}
+
+.cert-back-link {
+  font-family: "NTR", sans-serif;
+  color: var(--green-bright);
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.cert-back-link:hover {
+  text-decoration: underline;
+}
+
+/* Other certificates cross-links at the bottom of the cert page. */
+.cert-page-others {
+  margin-top: 32px;
+}
+
+.cert-page-others-label {
+  display: block;
+  font-family: "NTR", sans-serif;
+  font-size: 15px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--slate);
+  margin-bottom: 14px;
+}
+
+.cert-page-others-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.cert-page-other-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--lightest-navy);
+  background-color: var(--light-navy);
+  color: var(--light-slate);
+  font-family: "NTR", sans-serif;
+  font-size: 14px;
+  text-decoration: none;
+  transition: border-color 0.2s ease, color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.cert-page-other-pill:hover {
+  border-color: var(--green-bright);
+  color: var(--green-bright);
+  background-color: var(--green-tint);
+}
+
+/* ---------- Responsive ---------- */
+@media only screen and (max-width: 768px) {
+  .cert-page {
+    padding: 80px 0 40px;
+  }
+
+  .cert-page-head {
+    flex-wrap: wrap;
+  }
+
+  .cert-page-open {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .cert-page-frame-wrap {
+    height: 70vh;
+    min-height: 480px;
+  }
+
+  .cert-pill {
+    font-size: 15px;
+    padding: 8px 15px;
+  }
+}

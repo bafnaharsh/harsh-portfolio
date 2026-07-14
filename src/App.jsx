@@ -6,6 +6,7 @@ import Projects from "./components/Projects";
 import Education from "./components/Education";
 import Photography from "./components/Photography";
 import PhotographyGallery from "./components/PhotographyGallery";
+import CertificateViewer from "./components/CertificateViewer";
 import Credits from "./components/Credits";
 import NavBar from "./components/NavBar";
 import RobotGame from "./components/RobotGame";
@@ -83,6 +84,7 @@ function App() {
             }
           />
           <Route path="/photography" element={<PhotographyGallery />} />
+          <Route path="/cert/:slug" element={<CertificateViewer />} />
         </Routes>
       </div>
     </div>

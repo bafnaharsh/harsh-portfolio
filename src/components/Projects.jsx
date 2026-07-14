@@ -209,6 +209,7 @@ const Projects = () => {
         <PdfViewerModal
           title={`${activeCert.title} — ${activeCert.issuer}`}
           src={activeCert.file}
+          shareUrl={`${window.location.origin}/cert/${activeCert.slug}`}
           onClose={() => setActiveCert(null)}
         />
       )}

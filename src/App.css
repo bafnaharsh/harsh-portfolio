@@ -99,6 +99,11 @@ a:hover {
   color: var(--lightest-slate);
   font-size: 46px;
   font-weight: bold;
+  display: inline-block;
+  max-width: 100%;
+  line-height: 1.2;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 @media only screen and (max-width: 800px) {
@@ -122,5 +127,6 @@ a:hover {
 
   .section-title {
     font-size: 32px;
+    max-width: 100%;
   }
 }

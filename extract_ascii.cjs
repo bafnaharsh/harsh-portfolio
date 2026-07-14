@@ -7,10 +7,10 @@ const path = require('path');
   const page = await browser.newPage();
   
   // Read the image file and convert to data URL
-  const imgPath = path.join(__dirname, 'public/profile.png');
+  const imgPath = path.join(__dirname, 'public/profile.webp');
   const imgBuffer = fs.readFileSync(imgPath);
   const imgBase64 = imgBuffer.toString('base64');
-  const dataUrl = `data:image/png;base64,${imgBase64}`;
+  const dataUrl = `data:image/webp;base64,${imgBase64}`;
 
   const results = await page.evaluate(async (dataUrl) => {
     const chars = " .:-=+*#%@".split("");

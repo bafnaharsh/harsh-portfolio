@@ -1,0 +1,46 @@
+/* Shared PDF viewer modal.
+   The overlay/modal/close/frame rules live in Intro.css (originally for the
+   resume). This file only adds the toolbar bar that sits above the iframe and
+   adjusts the modal layout so the iframe fills the remaining height. */
+
+.pdf-viewer-modal {
+  display: flex;
+  flex-direction: column;
+}
+
+.pdf-viewer-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(100, 255, 218, 0.12);
+  background: rgba(10, 25, 47, 0.65);
+  flex: 0 0 auto;
+}
+
+.pdf-viewer-bar-title {
+  font-family: "NTR", sans-serif;
+  font-size: 18px;
+  color: var(--lightest-slate);
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: calc(100% - 60px);
+}
+
+/* The close button is positioned relative to the bar, not the modal. Scoped
+   under .pdf-viewer-bar so it wins specificity over the resume rule in
+   Intro.css (.pdf-viewer-close). */
+.pdf-viewer-bar .pdf-viewer-close {
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+}
+
+.pdf-viewer-frame {
+  flex: 1 1 auto;
+  min-height: 0;
+}

@@ -27,7 +27,7 @@ TabPanel.propTypes = {
   children: PropTypes.node,
   index: PropTypes.any.isRequired,
   value: PropTypes.any.isRequired,
-  isMobile: PropTypes.bool
+  isMobile: PropTypes.bool,
 };
 
 function a11yProps(index, isMobile) {
@@ -36,12 +36,11 @@ function a11yProps(index, isMobile) {
       id: "full-width-tab-" + index,
       "aria-controls": "full-width-tabpanel-" + index,
     };
-  } else {
-    return {
-      id: "vertical-tab-" + index,
-      "aria-controls": "vertical-tabpanel-" + index,
-    };
   }
+  return {
+    id: "vertical-tab-" + index,
+    "aria-controls": "vertical-tabpanel-" + index,
+  };
 }
 
 const JobList = () => {
@@ -50,38 +49,22 @@ const JobList = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const experienceItems = {
-    Google: {
-      jobTitle: "Software Engineer III @",
-      duration: "JAN 2025 - PRESENT",
+    Quantiphi: {
+      jobTitle: "Machine Learning Engineer @",
+      duration: "FEB 2024 - PRESENT",
       desc: [
-        "Built and launched large-scale machine learning-driven conversion autobidding models at Google scale, influencing bidding decisions across millions of advertisers and users",
-        "Integrated Google Gemini encoders into bidding models to enhance feature representation and improve prediction performance",
-        "Led end-to-end model development (data, training, evaluation, and production launch) for Proxybidder ML systems, directly driving multi-million-dollar revenue impact through improved conversion efficiency",
+        "Led 5+ ML engineers in a 24+ member team to ship production multi-agent systems for natural-language enterprise analytics.",
+        "Architected ADK-based agents with RAG over 14+ structured data sources, including Kafka topics, Google Ads, and Google Analytics schemas.",
+        "Built AI search, recommendation, campaign-generation, and lead-hotspot workflows that reduced analysis and drafting cycles from days to minutes.",
       ],
     },
-    Pinterest: {
-      jobTitle: "Software Engineer II @",
-      duration: "JUL 2024 - JAN 2025",
-      desc: [
-        "Led the development of a generative AI solution using LLMs for advanced prompt engineering, improving SEO and ad relevance, and resulting in a 20% increase in click-through rates, ad revenue and business visibility",
-        "Designed and developed an intuitive user interface for a prompt management system for 500K+ users, with key focus on accessibility, real-time collaboration features, and dynamic data visualization",
-      ],
-    },
-    Amazon: {
-      jobTitle: "Software Development Engineer II @",
-      duration: "JUL 2022 - MAY 2024",
-      desc: [
-        "Led development of end-to-end region build automation across Route 53 (AWS's DNS web service).  This enabled the launch of customer-facing global services in new regions within a day, a significant reduction from the previous time-frame of a month.",
-        "Re-built Route 53's core domain management and DNS systems to provide a better user experience to millions of customers.",
-      ],
-    },
-    Wattpad: {
+    "JP Morgan Chase & Co.": {
       jobTitle: "Software Engineer Intern @",
-      duration: "MAY 2020 - APR 2021",
+      duration: "NOV 2022 - SEP 2023",
       desc: [
-        "Developed a responsive React web page (the new Story Details) from scratch, both on client and server side, for an app with massive scale (2 billion daily requests).",
-        "Iteratively built web experiences for 80 million users across high-traffic pages.",
-        "Collaborated with senior engineers and product management following best practices for the full software development life cycle, including coding standards, code reviews, source control management, build processes, testing, and operations.",
+        "Designed a real-time data streaming interface capable of processing 100,000+ data points per second.",
+        "Used JP Morgan Chase's Perspective visualization tool to build live financial correlation graphs.",
+        "Implemented upper and lower-bound indicators for real-time monitoring of stock-correlation metrics.",
       ],
     },
   };
@@ -91,37 +74,39 @@ const JobList = () => {
   };
 
   return (
-    <Box sx={{ 
-      flexGrow: 1, 
-      bgcolor: "transparent", 
-      display: "flex", 
-      flexDirection: isMobile ? "column" : "row",
-      height: "auto",
-      minHeight: 300
-    }}>
+    <Box
+      sx={{
+        flexGrow: 1,
+        bgcolor: "transparent",
+        display: "flex",
+        flexDirection: isMobile ? "column" : "row",
+        height: "auto",
+        minHeight: 300,
+      }}
+    >
       <Tabs
         orientation={!isMobile ? "vertical" : "horizontal"}
         variant="scrollable"
         scrollButtons="auto"
         value={value}
         onChange={handleChange}
-        sx={{ 
-          borderRight: isMobile ? 0 : 1, 
+        sx={{
+          borderRight: isMobile ? 0 : 1,
           borderBottom: isMobile ? 1 : 0,
           borderColor: "var(--lightest-navy)",
           "& .MuiTabs-indicator": {
-            backgroundColor: "var(--green-bright)"
+            backgroundColor: "var(--green-bright)",
           },
           "& .MuiTabs-flexContainer": {
-            borderBottom: isMobile ? "1px solid var(--lightest-navy)" : "none"
-          }
+            borderBottom: isMobile ? "1px solid var(--lightest-navy)" : "none",
+          },
         }}
       >
         {Object.keys(experienceItems).map((key, i) => (
-          <Tab 
-            key={i} 
-            label={key} 
-            {...a11yProps(i, isMobile)} 
+          <Tab
+            key={i}
+            label={key}
+            {...a11yProps(i, isMobile)}
             sx={{
               color: "var(--slate)",
               fontFamily: "NTR",
@@ -133,12 +118,12 @@ const JobList = () => {
               minHeight: "48px",
               minWidth: isMobile ? "120px" : "auto",
               "&.Mui-selected": {
-                color: "var(--green-bright)"
+                color: "var(--green-bright)",
               },
               "&:hover": {
                 color: "var(--green-bright)",
-                backgroundColor: "var(--green-tint)"
-              }
+                backgroundColor: "var(--green-tint)",
+              },
             }}
           />
         ))}
@@ -150,17 +135,13 @@ const JobList = () => {
               {experienceItems[key]["jobTitle"] + " "}
             </span>
             <span className="joblist-job-company">{key}</span>
-            <div className="joblist-duration">
-              {experienceItems[key]["duration"]}
-            </div>
+            <div className="joblist-duration">{experienceItems[key]["duration"]}</div>
             <ul className="job-description">
-              {experienceItems[key]["desc"].map(function (descItem, i) {
-                return (
-                  <FadeInSection key={i} delay={(i + 1) * 100 + "ms"}>
-                    <li>{descItem}</li>
-                  </FadeInSection>
-                );
-              })}
+              {experienceItems[key]["desc"].map((descItem, descIndex) => (
+                <FadeInSection key={descIndex} delay={(descIndex + 1) * 100 + "ms"}>
+                  <li>{descItem}</li>
+                </FadeInSection>
+              ))}
             </ul>
           </TabPanel>
         ))}

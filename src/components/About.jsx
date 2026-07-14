@@ -5,27 +5,22 @@ import FadeInSection from "./FadeInSection";
 const About = () => {
   const one = (
     <p>
-      I am currently a <b>Software Engineer</b> at
-      <a href="https://www.ads.google.com/"> Google</a>, where I help build
-      autobidder models that make Google Search money. Previously, I was at{" "}
-      <a href="https://www.aboutamazon.com/"> Amazon</a> and{" "}
-      <a href="https://newsroom.pinterest.com/company/"> Pinterest.</a>
+      I am currently a <b>Machine Learning Engineer</b> at
+      <a href="https://quantiphi.com/"> Quantiphi</a>, where I build
+      generative AI, RAG, and multi-agent systems for production enterprise
+      workflows. Previously, I worked with{" "}
+      <a href="https://www.jpmorganchase.com/">JP Morgan Chase & Co.</a>
     </p>
   );
   const two = (
     <p>
-      In my free time, I’m nerdy about tech gadgets, love literary fiction, and
-      play way too many battle royale games. Oh, I make content too.
+      I like systems that feel simple on the surface but do serious work
+      underneath: retrieval pipelines, natural-language analytics, and AI tools
+      that make data easier to use.
     </p>
   );
 
-  const techStack = [
-    "Python",
-    "Typescript",
-    "React.js",
-    "Java",
-    "Javascript ES6+",
-  ];
+  const techStack = ["Python", "SQL", "LangChain", "Google ADK", "Vertex AI", "FastAPI"];
 
   return (
     <div id="about">
@@ -47,7 +42,7 @@ const About = () => {
             {two}
           </div>
           <div className="about-image">
-            <img alt="Gazi Jarin" src={"/assets/me2.jpg"} />
+            <img alt="Harsh Bafna" src={"/assets/about-harsh.webp"} />
           </div>
         </div>
       </FadeInSection>

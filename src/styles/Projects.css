@@ -4,46 +4,13 @@
   padding: 80px 0;
 }
 
-.projects-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(300px, 1fr));
-  grid-gap: 10px;
-}
-@media (max-width: 1080px) {
-  .projects-grid {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  }
-}
-
+.project-container,
+.projects-carousel-shell,
+.projects-carousel-viewport,
+.projects-grid,
+.projects-grid--carousel,
 .projects-card {
-  position: relative;
-  cursor: default;
-  display: flex;
-  flex-direction: column;
-  /* align-items: flex-start; */
-  position: relative;
-  height: 100%;
-  padding: 2rem 1.75rem;
-  background-color: var(--light-navy);
-  border-radius: 16px;
-  transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
-}
-
-.projects-card:hover {
-  transform: translateY(-7px);
-  background-color: var(--lightest-navy);
-}
-
-.project-card-link {
-  text-decoration: none !important;
-  color: inherit !important;
-  display: block;
-  height: 100%;
-}
-
-.project-card-link:hover {
-  text-decoration: none !important;
-  color: inherit !important;
+  overflow: visible;
 }
 
 #projects .section-header {
@@ -57,6 +24,71 @@
   width: auto;
 }
 
+/* ------------------------------------------------------------------ */
+/* Carousel shell: arrow | viewport | arrow                            */
+/* The arrows live in their own fixed-width columns with a real gap,   */
+/* so cards can never render under them.                               */
+/* ------------------------------------------------------------------ */
+.projects-carousel-shell {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 20px;
+}
+
+/* The clipping window. overflow-x: hidden prevents cards from  */
+/* bleeding sideways into the arrow buttons while still allowing   */
+/* vertical lift on hover.                                         */
+.projects-carousel-viewport {
+  overflow-x: hidden;
+  overflow-y: visible;
+  position: relative;
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+/* The sliding track. Its width is sized so exactly --visible-count   */
+/* cards fit across the viewport, and each card is an equal share.    */
+.projects-grid {
+  display: grid;
+  gap: 16px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.projects-grid--carousel {
+  /* Arrange cards in a single horizontal row, then slide the track. */
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  width: calc(100% * var(--card-count, 5) / var(--visible-count, 3));
+  transition: transform 0.5s cubic-bezier(0.45, 0, 0.15, 1);
+  will-change: transform;
+  position: relative;
+  z-index: 0;
+}
+
+.projects-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  padding: 2.25rem 1.75rem;
+  background-color: var(--light-navy);
+  border-radius: 16px;
+  border: 1px solid transparent;
+  transition: transform 0.25s cubic-bezier(0.645, 0.045, 0.355, 1),
+    background-color 0.25s ease, border-color 0.25s ease;
+}
+
+.projects-card:hover {
+  transform: translateY(-7px);
+  background-color: var(--lightest-navy);
+  border-color: var(--green-tint);
+  z-index: 3;
+}
 
 .card-header {
   margin-top: -20px;
@@ -66,14 +98,52 @@
   justify-content: space-between;
   border-bottom: none !important;
 }
-.folder-icon {
+
+.folder-icon,
+.project-icon {
   color: var(--green-bright);
+}
+
+/* ------------------------------------------------------------------ */
+/* Arrow buttons                                                       */
+/* ------------------------------------------------------------------ */
+.projects-carousel-btn {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--lightest-navy);
+  border-radius: 50%;
+  color: var(--green-bright);
+  background-color: var(--navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.projects-carousel-btn:hover:not(:disabled) {
+  border-color: var(--green-bright);
+  background-color: var(--green-tint);
+  transform: translateY(-2px);
+}
+
+.projects-carousel-btn:focus-visible {
+  outline: 2px solid var(--green-bright);
+  outline-offset: 3px;
+}
+
+.projects-carousel-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
 }
 
 .explore-link {
   order: 2;
   margin-left: 20px;
-  font-family: "NTR", sans-serif;
+  font-family: "Ntr", sans-serif;
   font-size: 18px;
   color: var(--green-bright);
   text-decoration: none;
@@ -106,15 +176,14 @@
 }
 
 .card-title {
-  font-family: "NTR", sans-serif;
+  font-family: "Ntr", sans-serif;
   color: var(--lightest-slate);
   font-size: 24px;
   font-weight: bold;
 }
 
-
 .card-desc {
-  font-family: "NTR", sans-serif;
+  font-family: "Ntr", sans-serif;
   color: var(--slate);
   font-size: 18px;
   padding-bottom: 40px;
@@ -124,7 +193,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-family: "NTR", sans-serif;
+  font-family: "Ntr", sans-serif;
   font-size: 14px;
   color: var(--green-bright);
   border: 1px solid var(--green-bright);
@@ -140,9 +209,17 @@
 }
 
 .card-tech {
-  font-family: "NTR", sans-serif;
+  margin-top: auto;
+  font-family: "Ntr", sans-serif;
   color: var(--slate);
   font-size: 16px;
+}
+
+.project-company {
+  font-family: "Ntr", sans-serif;
+  color: var(--green-bright);
+  font-size: 16px;
+  text-align: right;
 }
 
 .spotlight-projects-desktop {
@@ -177,7 +254,7 @@
 }
 
 .carousel-caption {
-  font-family: "NTR", sans-serif;
+  font-family: "Ntr", sans-serif;
   max-width: 500px;
   right: unset !important;
   left: 25% !important;
@@ -191,14 +268,14 @@
 }
 
 .carousel-caption p {
-  font-family: "NTR", sans-serif;
+  font-family: "Ntr", sans-serif;
   font-weight: bold;
   font-size: 18px;
   color: var(--lightest-slate);
 }
 
 .carousel-caption p.techStack {
-  font-family: "NTR", sans-serif;
+  font-family: "Ntr", sans-serif;
   font-size: 14px;
   font-weight: bold;
   color: var(--green-bright);
@@ -208,7 +285,16 @@
   background-color: var(--green-bright);
 }
 
-@media only screen and (max-width: 600px) {
+/* ------------------------------------------------------------------ */
+/* Responsive                                                          */
+/* ------------------------------------------------------------------ */
+@media (max-width: 1080px) {
+  .projects-carousel-shell {
+    gap: 14px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
   .spotlight-projects-desktop {
     display: none;
   }
@@ -238,6 +324,31 @@
     padding: 60px 20px;
   }
 
+  .projects-carousel-shell {
+    display: block;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Single column: no arrows, just a stacked list. */
+  .projects-carousel-viewport {
+    overflow: visible;
+  }
+
+  .projects-grid--carousel {
+    transform: none !important;
+    width: auto;
+    grid-auto-flow: row;
+    grid-auto-columns: minmax(0, 1fr);
+  }
+
+  .projects-grid--carousel > .projects-card {
+    width: 100%;
+  }
+
+  .projects-carousel-btn {
+    display: none;
+  }
+
   #projects .section-header {
     flex-wrap: wrap;
     justify-content: flex-start;
@@ -246,7 +357,6 @@
   #projects .section-header::after {
     display: none;
   }
-
 
   .explore-link {
     width: 100%;

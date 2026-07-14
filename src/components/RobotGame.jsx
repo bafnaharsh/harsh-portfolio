@@ -435,6 +435,23 @@ const RobotGame = ({ active }) => {
         }
       }
 
+      const nextScrollY = window.scrollY;
+      const viewportY = a.docY - nextScrollY;
+      const lowerFollowLine = canvas.height * 0.68;
+      const upperFollowLine = canvas.height * 0.28;
+      const maxScrollY = Math.max(0, document.documentElement.scrollHeight - canvas.height);
+      let targetScrollY = nextScrollY;
+
+      if (viewportY > lowerFollowLine) {
+        targetScrollY = Math.min(maxScrollY, a.docY - lowerFollowLine);
+      } else if (viewportY < upperFollowLine && nextScrollY > 0) {
+        targetScrollY = Math.max(0, a.docY - upperFollowLine);
+      }
+
+      if (Math.abs(targetScrollY - nextScrollY) > 1) {
+        window.scrollTo({ top: targetScrollY, behavior: "auto" });
+      }
+
       if (a.docY - scrollY > canvas.height + 100) {
         a.status = "dead"; setGameStatus("dead"); return;
       }

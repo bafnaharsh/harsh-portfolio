@@ -54,6 +54,16 @@
   display: block;
 }
 
+.gallery-empty {
+  font-family: "NTR", sans-serif;
+  color: var(--slate);
+  font-size: 18px;
+  padding: 2rem 1.75rem;
+  background-color: var(--light-navy);
+  border: 1px solid var(--lightest-navy);
+  border-radius: 8px;
+}
+
 @media (max-width: 768px) {
   .art-gallery-page {
     padding: 60px 20px;

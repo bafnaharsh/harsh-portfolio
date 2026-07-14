@@ -1,171 +1,174 @@
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import "../styles/Projects.css";
-import FolderOpenRoundedIcon from "@mui/icons-material/FolderOpenRounded";
+import StorageRoundedIcon from "@mui/icons-material/StorageRounded";
+import TravelExploreRoundedIcon from "@mui/icons-material/TravelExploreRounded";
+import MarkEmailReadRoundedIcon from "@mui/icons-material/MarkEmailReadRounded";
+import CrisisAlertRoundedIcon from "@mui/icons-material/CrisisAlertRounded";
+import ShowChartRoundedIcon from "@mui/icons-material/ShowChartRounded";
+import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
+import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 import FadeInSection from "./FadeInSection";
-import { Carousel } from "react-bootstrap";
-import ExternalLinks from "./ExternalLinks";
 
-const spotlightProjects = {
-  Blob: {
-    title: "blob",
-    desc: "A Portal 2-inspired 3D puzzle platformer with a split mechanic built in Unity",
-    techStack: "C# (UNITY)",
-    link: "https://github.com/gazijarin/Blob",
-    image: "/assets/blob.png",
+const projects = [
+  {
+    title: "RCA, Segmentation & NL2SQL Bot",
+    company: "Quantiphi",
+    desc: "Production multi-agent analytics platform that lets business users query structured enterprise data through natural-language chat.",
+    techStack: "Python, SQL, Google ADK, LLMs, RAG, AI Agents",
+    icon: StorageRoundedIcon,
   },
-  "No Man's Land": {
-    title: "no man's land",
-    desc: "A third-person survival-mode game where you battle against time and space to return to Earth.",
-    techStack: "C# (UNITY)",
-    link: "https://github.com/slakh96/no-mans-land",
-    open: "https://gazijarin.itch.io/no-mans-land",
-    image: "/assets/nomansland.png",
+  {
+    title: "AI Search & Recommendation Engine",
+    company: "Quantiphi",
+    desc: "Conversational product discovery system over an 80K+ SKU catalog, combining Vertex AI Search with recommendation models.",
+    techStack: "Python, Vertex AI Search, LLMs, Ranking",
+    icon: TravelExploreRoundedIcon,
   },
-  "Tall Tales": {
-    title: "tall tales",
-    desc: "A multi-player story-telling web game for 3-5 players. Its usage of sockets to allow for concurrent gameplay, connecting friends across the internet.",
-    techStack: "NODE.JS (SOCKET.IO), REACT.JS, MONGODB",
-    link: "https://github.com/gazijarin/TallTales",
-    open: "https://talltales.herokuapp.com/",
-    image: "/assets/talltales.png",
+  {
+    title: "AI Email Campaign Generator",
+    company: "Quantiphi",
+    desc: "AI workflow that scrapes property themes and metadata, then generates polished marketing emails with enhanced imagery.",
+    techStack: "Python, LLMs, Web Scraping, NLP, Imagen",
+    icon: MarkEmailReadRoundedIcon,
   },
-  Portfolio: {
-    title: "portfolio.js",
-    desc: "A small JS library that helps with clear and succinct data presentation.",
-    techStack: "NODE.JS (EXPRESS.JS)",
-    link: "https://github.com/gazijarin/Portfolio.js",
-    open: "https://afternoon-ocean-92382.herokuapp.com/",
-    image: "/assets/portfolio.png",
+  {
+    title: "Lead Hotspot Detection",
+    company: "Quantiphi",
+    desc: "Hybrid ML and rules-based system for predicting lead-contamination hotspots from SDWIS public water system data.",
+    techStack: "Python, LangChain, LLMs, EDA, Feature Engineering",
+    icon: CrisisAlertRoundedIcon,
   },
-};
+  {
+    title: "Real-Time Market Visualization",
+    company: "JP Morgan Chase & Co.",
+    desc: "Streaming interface and live graphing workflow for monitoring historical stock-correlation behavior at high throughput.",
+    techStack: "Perspective, Real-Time Data Streaming, Visualization",
+    icon: ShowChartRoundedIcon,
+  },
+];
 
-const projects = {
-  "Gazi-V2 Portfolio": {
-    desc: "This is the second iteration of my portfolio, designed and rebuilt from the ground up using React and Vite. The previous version, now deprecated, earned 288+ stars on GitHub.",
-    techStack: "React.js, Vite, Bootstrap",
-    link: "https://github.com/gazijarin/Gazi-V2",
-    open: "https://gazijarin.com/",
-  },
-  "TDSB Homework Management Interface": {
-    desc: "An application created for Toronto District School Board, with a Flask back-end and a Vue front-end.",
-    techStack: "Python (Flask), Vue.js, Bootstrap, SQL",
-    link: "https://github.com/gazijarin/TDSBHomeworkManagement",
-    open: "https://tdsb-app.herokuapp.com/",
-  },
-  "Adam A.I.": {
-    desc: "A self-learning A.I. that learns to traverse through a complex maze using the genetic algorithm.",
-    techStack: "Javascript, HTML / CSS",
-    link: "https://github.com/gazijarin/adamai",
-    open: "https://gazijarin.github.io/AdamAI/",
-  },
-  /*
-  "Distributed Logging and Monitoring System": {
-    desc: "A system that establishes an ORM connection to a Prisma client in order to communicate logs from microservices.",
-    techStack: "Node.js (Express.js), React.js, PostgreSQL",
-    link: "https://github.com/gazijarin/Distributed-Logging-and-Monitoring-System",
-  },
-  */
+// Largest number of cards that can ever be shown side by side. Arrows are
+// only rendered when there are more projects than this.
+const MAX_VISIBLE = 3;
+
+// Returns how many cards fit the current viewport. Kept in sync with the CSS
+// breakpoints in Projects.css.
+const useVisibleCount = () => {
+  const getCount = () => {
+    if (typeof window === "undefined") return MAX_VISIBLE;
+    if (window.matchMedia("(max-width: 768px)").matches) return 1;
+    if (window.matchMedia("(max-width: 1080px)").matches) return 2;
+    return MAX_VISIBLE;
+  };
+
+  const [count, setCount] = useState(getCount);
+
+  useEffect(() => {
+    const mqlWide = window.matchMedia("(max-width: 1080px)");
+    const mqlNarrow = window.matchMedia("(max-width: 768px)");
+    const handler = () => setCount(getCount());
+    mqlWide.addEventListener("change", handler);
+    mqlNarrow.addEventListener("change", handler);
+    return () => {
+      mqlWide.removeEventListener("change", handler);
+      mqlNarrow.removeEventListener("change", handler);
+    };
+  }, []);
+
+  return count;
 };
 
 const Projects = () => {
+  const visibleCount = useVisibleCount();
+  const [index, setIndex] = useState(0);
+  const canSlide = projects.length > visibleCount;
+
+  // Furthest the first visible card can go without revealing empty space.
+  const maxIndex = Math.max(0, projects.length - visibleCount);
+
+  // Clamp at render time so a viewport resize can never leave us showing
+  // empty space at the end of the track. `index` itself is only ever changed
+  // by move(), which already clamps to [0, maxIndex].
+  const clampedIndex = Math.min(index, maxIndex);
+  const atStart = clampedIndex === 0;
+  const atEnd = clampedIndex === maxIndex;
+
+  const move = (direction) => {
+    setIndex((current) => {
+      const next = current + direction;
+      return Math.max(0, Math.min(maxIndex, next));
+    });
+  };
+
+  // Slide percentage is expressed in track units (100% of the track), so each
+  // step moves exactly one card width regardless of visibleCount.
+  const slideStyle = useMemo(
+    () => ({ transform: `translateX(-${clampedIndex * (100 / visibleCount)}%)` }),
+    [clampedIndex, visibleCount]
+  );
+
   return (
     <div id="projects">
-      <div className="section-header ">
-        <span className="section-title">/ software</span>
-        <a
-          href="https://github.com/gazijarin"
-          className="explore-link"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          View all projects
-        </a>
-      </div>
-      <div className="spotlight-projects-desktop">
-        <Carousel interval={null}>
-          {Object.keys(spotlightProjects).map((key, i) => (
-            <Carousel.Item key={i}>
-              <img
-                className="d-block w-100"
-                src={spotlightProjects[key]["image"]}
-                alt={key}
-              />
-              <Carousel.Caption>
-                <h3>{spotlightProjects[key]["title"]}</h3>
-                <div>
-                  {spotlightProjects[key]["desc"]}
-                  <div className="techStack">
-                    {spotlightProjects[key]["techStack"]}
-                  </div>
-                </div>
-                <ExternalLinks
-                  githubLink={spotlightProjects[key]["link"]}
-                  openLink={spotlightProjects[key]["open"]}
-                />
-              </Carousel.Caption>
-            </Carousel.Item>
-          ))}
-        </Carousel>
-      </div>
-
-      <div className="spotlight-projects-mobile">
-        {Object.keys(spotlightProjects).map((key, i) => (
-          <FadeInSection key={i} delay={(i + 1) * 100 + "ms"}>
-            <div className="projects-card">
-              <div className="card-header">
-                <div className="folder-icon">
-                  <FolderOpenRoundedIcon sx={{ fontSize: 35 }} />
-                </div>
-                <ExternalLinks
-                  githubLink={spotlightProjects[key]["link"]}
-                  openLink={spotlightProjects[key]["open"]}
-                />
-              </div>
-
-              <a
-                href={
-                  spotlightProjects[key]["open"] ||
-                  spotlightProjects[key]["link"]
-                }
-                target="_blank"
-                rel="noopener noreferrer"
-                className="project-card-link"
-              >
-                <div className="card-title">
-                  {spotlightProjects[key]["title"]}
-                </div>
-                <div className="spotlight-mobile-image">
-                  <img src={spotlightProjects[key]["image"]} alt={key} />
-                </div>
-              </a>
-              <div className="card-desc">{spotlightProjects[key]["desc"]}</div>
-              <div className="card-tech">{spotlightProjects[key]["techStack"]}</div>
-            </div>
-          </FadeInSection>
-        ))}
+      <div className="section-header">
+        <span className="section-title">/ software &amp; projects</span>
       </div>
       <div className="project-container">
-        <ul className="projects-grid">
-          {Object.keys(projects).map((key, i) => (
-            <FadeInSection key={i} delay={(i + 1) * 100 + "ms"}>
-              <li className="projects-card">
-                <div className="card-header">
-                  <div className="folder-icon">
-                    <FolderOpenRoundedIcon sx={{ fontSize: 35 }} />
-                  </div>
-                  <ExternalLinks
-                    githubLink={projects[key]["link"]}
-                    openLink={projects[key]["open"]}
-                  />
-                </div>
+        <div className="projects-carousel-shell">
+          {canSlide && (
+            <button
+              className="projects-carousel-btn"
+              type="button"
+              onClick={() => move(-1)}
+              disabled={atStart}
+              aria-label="Previous projects"
+            >
+              <ArrowBackIosNewRoundedIcon sx={{ fontSize: 18 }} />
+            </button>
+          )}
 
-                <div className="card-title">{key}</div>
-                <div className="card-desc">{projects[key]["desc"]}</div>
-                <div className="card-tech">{projects[key]["techStack"]}</div>
-              </li>
-            </FadeInSection>
-          ))}
-        </ul>
+          <div className="projects-carousel-viewport">
+            <ul
+              className="projects-grid projects-grid--carousel"
+              style={{
+                ...slideStyle,
+                "--visible-count": visibleCount,
+                "--card-count": projects.length,
+              }}
+            >
+              {projects.map((project, i) => {
+                const ProjectIcon = project.icon;
+                return (
+                  <li className="projects-card" key={project.title}>
+                    <FadeInSection delay={(i + 1) * 100 + "ms"}>
+                      <div className="card-header">
+                        <div className="project-icon">
+                          <ProjectIcon sx={{ fontSize: 35 }} />
+                        </div>
+                        <div className="project-company">{project.company}</div>
+                      </div>
+
+                      <div className="card-title">{project.title}</div>
+                      <div className="card-desc">{project.desc}</div>
+                      <div className="card-tech">{project.techStack}</div>
+                    </FadeInSection>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+
+          {canSlide && (
+            <button
+              className="projects-carousel-btn"
+              type="button"
+              onClick={() => move(1)}
+              disabled={atEnd}
+              aria-label="Next projects"
+            >
+              <ArrowForwardIosRoundedIcon sx={{ fontSize: 18 }} />
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

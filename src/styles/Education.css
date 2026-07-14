@@ -1,0 +1,62 @@
+#education {
+  margin: auto;
+  max-width: 1000px;
+  padding: 80px 0;
+}
+
+#education .section-header {
+  display: flex;
+}
+
+.education-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.education-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 1.75rem;
+  background-color: var(--light-navy);
+  border-radius: 16px;
+  border: 1px solid var(--lightest-navy);
+}
+
+.education-school {
+  font-family: "NTR", sans-serif;
+  color: var(--lightest-slate);
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.education-program,
+.education-detail,
+.education-meta {
+  font-family: "NTR", sans-serif;
+  color: var(--slate);
+  font-size: 18px;
+}
+
+.education-meta {
+  min-width: 170px;
+  text-align: right;
+  color: var(--green-bright);
+}
+
+@media only screen and (max-width: 600px) {
+  #education {
+    padding: 60px 0;
+  }
+
+  .education-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .education-meta {
+    min-width: 0;
+    text-align: left;
+  }
+}

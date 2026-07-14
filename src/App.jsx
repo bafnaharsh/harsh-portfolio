@@ -1,18 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Intro from "./components/Intro";
 import Experience from "./components/Experience";
 import About from "./components/About";
 import Projects from "./components/Projects";
-import HardwareProjects from "./components/HardwareProjects";
-import ProjectLog from "./components/ProjectLog";
-import Art from "./components/Art";
-import ArtGallery from "./components/ArtGallery";
+import Education from "./components/Education";
+import Photography from "./components/Photography";
+import PhotographyGallery from "./components/PhotographyGallery";
 import Credits from "./components/Credits";
 import NavBar from "./components/NavBar";
-import SidebarNav from "./components/SidebarNav";
 import RobotGame from "./components/RobotGame";
 import { Routes, Route, useLocation } from "react-router-dom";
-import { useEffect } from "react";
 import "./App.css";
 import "./styles/Global.css";
 import "./styles/RobotGame.css";
@@ -53,7 +50,7 @@ function App() {
           <div className="robot-game-info">
             <div className="robot-game-info-title">how to play</div>
             <div className="robot-game-info-row">
-              <span className="robot-game-key">← →</span>
+              <span className="robot-game-key">left/right</span>
               <span>move</span>
             </div>
             <div className="robot-game-info-row">
@@ -68,7 +65,6 @@ function App() {
           </div>
         )}
       </div>
-      <SidebarNav />
       <RobotGame active={gameActive} />
       <div id="content">
         <Routes>
@@ -80,14 +76,13 @@ function App() {
                 <About />
                 <Experience />
                 <Projects />
-                <HardwareProjects />
-                <Art />
+                <Education />
+                <Photography />
                 <Credits />
               </>
             }
           />
-          <Route path="/art" element={<ArtGallery />} />
-          <Route path="/hardware/:projectId" element={<ProjectLog />} />
+          <Route path="/photography" element={<PhotographyGallery />} />
         </Routes>
       </div>
     </div>

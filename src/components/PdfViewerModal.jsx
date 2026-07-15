@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
@@ -61,7 +62,7 @@ const PdfViewerModal = ({ title, src, onClose, shareUrl }) => {
     }
   };
 
-  return (
+  const viewer = (
     <div
       className="pdf-viewer-overlay"
       onClick={onClose}
@@ -111,6 +112,8 @@ const PdfViewerModal = ({ title, src, onClose, shareUrl }) => {
       </div>
     </div>
   );
+
+  return createPortal(viewer, document.body);
 };
 
 export default PdfViewerModal;

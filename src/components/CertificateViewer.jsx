@@ -7,9 +7,9 @@ import "../styles/ArtGallery.css";
 import "../styles/Certificates.css";
 import { getCertificateBySlug, certificates } from "../data/certificates";
 
-// Standalone, shareable certificate page at /cert/:slug. Renders the full PDF
+// Standalone, shareable certificate page at /certificate/:slug. Renders the full PDF
 // inline (like the resume) plus a back link to the home page. Direct links
-// (e.g. https://<site>/cert/google-cloud-engineer) work because of the SPA
+// (e.g. https://<site>/certificate/google-cloud-engineer) work because of the SPA
 // fallback in public/_redirects.
 const CertificateViewer = () => {
   const { slug } = useParams();
@@ -87,7 +87,7 @@ const CertificateViewer = () => {
               .map((c) => (
                 <Link
                   key={c.slug}
-                  to={`/cert/${c.slug}`}
+                  to={`/certificate/${c.slug}`}
                   className="cert-page-other-pill"
                 >
                   {c.title}

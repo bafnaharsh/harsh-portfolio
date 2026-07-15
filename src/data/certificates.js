@@ -5,9 +5,9 @@ import LightbulbRoundedIcon from "@mui/icons-material/LightbulbRounded";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 
 // Single source of truth for certificates. The `slug` is the URL segment used
-// for the shareable route ({site}/cert/<slug>), and `file` is the static PDF
+// for the shareable route ({site}/certificate/<slug>), and `file` is the static PDF
 // served from /public/certs. Both the homepage pills and the standalone
-// /cert/:slug page read from this list.
+// /certificate/:slug page read from this list.
 export const certificates = [
   {
     slug: "google-cloud-engineer",
@@ -22,6 +22,13 @@ export const certificates = [
     issuer: "Google Cloud",
     file: "/certs/google-ml-engineer.pdf",
     icon: PsychologyRoundedIcon,
+  },
+  {
+    slug: "jp-morgan-forage-internship",
+    title: "JP Morgan Forage Internship",
+    issuer: "JP Morgan Chase & Co.",
+    file: "/certs/jp%20morgan%20forage%20internship.pdf",
+    icon: EmojiEventsRoundedIcon,
   },
   {
     slug: "one-for-all",

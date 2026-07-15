@@ -180,16 +180,18 @@ const Projects = () => {
         <div className="cert-block">
           <div className="cert-block-label">certifications</div>
           <div className="cert-pills">
-            {certificates.map((cert) => {
-              const CertIcon = cert.icon;
-              return (
-                <button
-                  key={cert.slug}
-                  type="button"
-                  className="cert-pill"
-                  onClick={() => setActiveCert(cert)}
-                  title={`View ${cert.title} certificate`}
-                >
+            {certificates
+              .filter((cert) => cert.slug !== "jp-morgan-forage-internship")
+              .map((cert) => {
+                const CertIcon = cert.icon;
+                return (
+                  <button
+                    key={cert.slug}
+                    type="button"
+                    className="cert-pill"
+                    onClick={() => setActiveCert(cert)}
+                    title={`View ${cert.title} certificate`}
+                  >
                   <span className="cert-pill-icon">
                     <CertIcon sx={{ fontSize: 18 }} />
                   </span>
@@ -198,9 +200,9 @@ const Projects = () => {
                   <span className="cert-pill-arrow">
                     <NorthEastRoundedIcon sx={{ fontSize: 15 }} />
                   </span>
-                </button>
-              );
-            })}
+                  </button>
+                );
+              })}
           </div>
         </div>
       </FadeInSection>
@@ -209,7 +211,7 @@ const Projects = () => {
         <PdfViewerModal
           title={`${activeCert.title} — ${activeCert.issuer}`}
           src={activeCert.file}
-          shareUrl={`${window.location.origin}/cert/${activeCert.slug}`}
+          shareUrl={`${window.location.origin}/certificate/${activeCert.slug}`}
           onClose={() => setActiveCert(null)}
         />
       )}

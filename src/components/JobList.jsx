@@ -2,6 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Tabs, Tab, Typography, Box, useTheme, useMediaQuery } from "@mui/material";
 import FadeInSection from "./FadeInSection";
+import PdfViewerModal from "./PdfViewerModal";
+import { getCertificateBySlug } from "../data/certificates";
 
 function TabPanel(props) {
   const { children, value, index, isMobile, ...other } = props;
@@ -45,8 +47,10 @@ function a11yProps(index, isMobile) {
 
 const JobList = () => {
   const [value, setValue] = React.useState(0);
+  const [activeCertificate, setActiveCertificate] = React.useState(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const internshipCertificate = getCertificateBySlug("jp-morgan-forage-internship");
 
   const experienceItems = {
     Quantiphi: {
@@ -135,7 +139,9 @@ const JobList = () => {
               {experienceItems[key]["jobTitle"] + " "}
             </span>
             <span className="joblist-job-company">{key}</span>
-            <div className="joblist-duration">{experienceItems[key]["duration"]}</div>
+            <div className="joblist-duration-row">
+              <div className="joblist-duration">{experienceItems[key]["duration"]}</div>
+            </div>
             <ul className="job-description">
               {experienceItems[key]["desc"].map((descItem, descIndex) => (
                 <FadeInSection key={descIndex} delay={(descIndex + 1) * 100 + "ms"}>
@@ -143,9 +149,26 @@ const JobList = () => {
                 </FadeInSection>
               ))}
             </ul>
+            {key === "JP Morgan Chase & Co." && internshipCertificate && (
+              <button
+                type="button"
+                className="joblist-cert-button"
+                onClick={() => setActiveCertificate(internshipCertificate)}
+              >
+                View internship certificate
+              </button>
+            )}
           </TabPanel>
         ))}
       </Box>
+      {activeCertificate && (
+        <PdfViewerModal
+          title={`${activeCertificate.title} — ${activeCertificate.issuer}`}
+          src={`${activeCertificate.file}#view=FitH`}
+          shareUrl={`${window.location.origin}/certificate/${activeCertificate.slug}`}
+          onClose={() => setActiveCertificate(null)}
+        />
+      )}
     </Box>
   );
 };

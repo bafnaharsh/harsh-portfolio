@@ -85,6 +85,7 @@ function App() {
             }
           />
           <Route path="/photography" element={<PhotographyGallery />} />
+          <Route path="/certificate/:slug" element={<CertificateViewer />} />
           <Route path="/cert/:slug" element={<CertificateViewer />} />
           <Route path="/resume" element={<ResumeViewer />} />
         </Routes>

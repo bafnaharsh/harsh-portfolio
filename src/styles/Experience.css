@@ -18,10 +18,44 @@
   font-weight: bold;
 }
 
+.joblist-duration-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 6px;
+}
+
 .joblist-duration {
   font-family: "NTR", sans-serif;
   font-size: 18px;
   color: var(--slate);
+}
+
+.joblist-cert-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  margin-top: 4px;
+  padding: 8px 14px;
+  border: 1px solid rgba(100, 255, 218, 0.35);
+  border-radius: 999px;
+  background: rgba(100, 255, 218, 0.08);
+  color: var(--green-bright);
+  font-family: "NTR", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.joblist-cert-button:hover {
+  transform: translateY(-1px);
+  background: rgba(100, 255, 218, 0.16);
+  border-color: var(--green-bright);
+  color: var(--lightest-slate);
 }
 
 #vertical-tabpanel {

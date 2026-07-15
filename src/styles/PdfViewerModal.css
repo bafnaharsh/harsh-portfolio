@@ -3,9 +3,24 @@
    resume). This file only adds the toolbar bar that sits above the iframe and
    adjusts the modal layout so the iframe fills the remaining height. */
 
+.pdf-viewer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
 .pdf-viewer-modal {
   display: flex;
   flex-direction: column;
+  width: min(1100px, 100%);
+  height: min(90vh, 100%);
+  max-width: 1100px;
+  max-height: 90vh;
 }
 
 .pdf-viewer-bar {

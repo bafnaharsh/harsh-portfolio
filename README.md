@@ -1,9 +1,6 @@
 # Harsh Bafna — Portfolio
 
-Personal portfolio of **Harsh Bafna**, Machine Learning Engineer specializing
-in generative AI, multi-agent systems, and production-grade LLM applications.
-
-🔗 **Live site:** [harshbafna.netlify.app](https://harshbafna.netlify.app)
+🔗 **Live site:** [bafnaaharsh.netlify.app](https://bafnaaharsh.netlify.app)
 
 ---
 
@@ -19,20 +16,6 @@ in generative AI, multi-agent systems, and production-grade LLM applications.
 | Linting    | [ESLint](https://eslint.org/) (flat config, React Hooks plugin)                                                     |
 | Hosting    | [Netlify](https://www.netlify.com/)                                                                                 |
 
-## 📁 Project structure
-
-```
-src/
-  components/   # One component per section/feature (PascalCase.jsx)
-  data/         # Centralized content: certificates.js, photos.js
-  styles/       # One stylesheet per component (PascalCase.css)
-  assets/       # Pre-computed ASCII portrait data
-public/
-  assets/       # Images (photography, about photo)
-  certs/        # Certificate PDFs
-  sitemap.xml, robots.txt, manifest.json, _redirects
-```
-
 ## 🚀 Getting started
 
 ```sh
@@ -46,11 +29,6 @@ npm run dev       # start the local dev server (http://localhost:5173)
 npm run build      # production build → dist/
 npm run preview    # preview the production build locally
 ```
-
-## 🖼️ Preview
-
-<!-- Add a screenshot or GIF of the homepage here, e.g.: -->
-<!-- ![Portfolio preview](public/assets/preview.png) -->
 
 ## 📄 License
 

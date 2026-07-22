@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "../styles/Projects.css";
 import "../styles/Certificates.css";
 import StorageRoundedIcon from "@mui/icons-material/StorageRounded";
@@ -91,19 +91,32 @@ const Projects = () => {
   // Furthest the first visible card can go without revealing empty space.
   const maxIndex = Math.max(0, projects.length - visibleCount);
 
-  // Clamp at render time so a viewport resize can never leave us showing
+    // Clamp at render time so a viewport resize can never leave us showing
   // empty space at the end of the track. `index` itself is only ever changed
-  // by move(), which already clamps to [0, maxIndex].
+  // by move()/goTo(), which already clamp to [0, maxIndex].
   const clampedIndex = Math.min(index, maxIndex);
-  const atStart = clampedIndex === 0;
-  const atEnd = clampedIndex === maxIndex;
 
-  const move = (direction) => {
-    setIndex((current) => {
-      const next = current + direction;
-      return Math.max(0, Math.min(maxIndex, next));
-    });
-  };
+  // Total number of "pages" (dots) available for the current viewport.
+  const pageCount = maxIndex + 1;
+
+  const goTo = useCallback(
+    (target) => setIndex(Math.max(0, Math.min(maxIndex, target))),
+    [maxIndex]
+  );
+
+  // Step by `direction` cards. Wraps around the ends so the arrows always do
+  // something, which feels more alive than a hard disabled stop.
+  const move = useCallback(
+    (direction) => {
+      setIndex((current) => {
+        const next = current + direction;
+        if (next < 0) return maxIndex;
+        if (next > maxIndex) return 0;
+        return next;
+      });
+    },
+    [maxIndex]
+  );
 
   // Slide percentage is expressed in track units (100% of the track), so each
   // step moves exactly one card width regardless of visibleCount.
@@ -112,26 +125,65 @@ const Projects = () => {
     [clampedIndex, visibleCount]
   );
 
+  // ----- Keyboard navigation (when the carousel region is focused) ---------
+  const onKeyDown = (event) => {
+    if (!canSlide) return;
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      move(-1);
+    } else if (event.key === "ArrowRight") {
+      event.preventDefault();
+      move(1);
+    }
+  };
+
+  // ----- Touch / pointer swipe support ------------------------------------
+  const dragRef = useRef({ startX: 0, active: false });
+
+  const onPointerDown = (event) => {
+    if (!canSlide) return;
+    dragRef.current = { startX: event.clientX, active: true };
+  };
+
+  const onPointerUp = (event) => {
+    if (!dragRef.current.active) return;
+    const deltaX = event.clientX - dragRef.current.startX;
+    dragRef.current.active = false;
+    const SWIPE_THRESHOLD = 45;
+    if (deltaX <= -SWIPE_THRESHOLD) move(1);
+    else if (deltaX >= SWIPE_THRESHOLD) move(-1);
+  };
+
   return (
     <div id="projects">
-      <div className="section-header">
+            <div className="section-header">
         <span className="section-title">/ software &amp; certifications</span>
       </div>
       <div className="project-container">
-        <div className="projects-carousel-shell">
+        <div
+          className="projects-carousel-shell"
+          role="group"
+          aria-roledescription="carousel"
+          aria-label="Software projects"
+          tabIndex={canSlide ? 0 : -1}
+          onKeyDown={onKeyDown}
+        >
           {canSlide && (
             <button
-              className="projects-carousel-btn"
+              className="projects-carousel-btn projects-carousel-btn--prev"
               type="button"
               onClick={() => move(-1)}
-              disabled={atStart}
               aria-label="Previous projects"
             >
               <ArrowBackIosNewRoundedIcon sx={{ fontSize: 18 }} />
             </button>
           )}
 
-          <div className="projects-carousel-viewport">
+          <div
+            className="projects-carousel-viewport"
+            onPointerDown={onPointerDown}
+            onPointerUp={onPointerUp}
+          >
             <ul
               className="projects-grid projects-grid--carousel"
               style={{
@@ -142,8 +194,14 @@ const Projects = () => {
             >
               {projects.map((project, i) => {
                 const ProjectIcon = project.icon;
+                const isVisible =
+                  i >= clampedIndex && i < clampedIndex + visibleCount;
                 return (
-                  <li className="projects-card" key={project.title}>
+                  <li
+                    className={`projects-card${isVisible ? " projects-card--active" : ""}`}
+                    key={project.title}
+                    aria-hidden={canSlide && !isVisible ? "true" : undefined}
+                  >
                     <FadeInSection delay={(i + 1) * 100 + "ms"}>
                       <div className="card-header">
                         <div className="project-icon">
@@ -164,16 +222,42 @@ const Projects = () => {
 
           {canSlide && (
             <button
-              className="projects-carousel-btn"
+              className="projects-carousel-btn projects-carousel-btn--next"
               type="button"
               onClick={() => move(1)}
-              disabled={atEnd}
               aria-label="Next projects"
             >
               <ArrowForwardIosRoundedIcon sx={{ fontSize: 18 }} />
             </button>
           )}
         </div>
+
+        {canSlide && (
+          <div className="projects-carousel-nav">
+            <div
+              className="projects-carousel-dots"
+              role="tablist"
+              aria-label="Choose slide"
+            >
+              {Array.from({ length: pageCount }, (_, page) => (
+                <button
+                  key={page}
+                  type="button"
+                  role="tab"
+                  aria-selected={page === clampedIndex}
+                  aria-label={`Go to slide ${page + 1} of ${pageCount}`}
+                  className={`projects-carousel-dot${
+                    page === clampedIndex ? " projects-carousel-dot--active" : ""
+                  }`}
+                  onClick={() => goTo(page)}
+                />
+              ))}
+            </div>
+            <span className="projects-carousel-count">
+              {clampedIndex + 1} / {pageCount}
+            </span>
+          </div>
+        )}
       </div>
 
       <FadeInSection>

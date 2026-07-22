@@ -24,8 +24,8 @@ const About = () => {
 
   return (
     <div id="about">
-      <FadeInSection>
-        <div className="section-header ">
+            <FadeInSection>
+        <div className="section-header">
           <span className="section-title">/ about me</span>
         </div>
         <div className="about-content">
@@ -42,7 +42,7 @@ const About = () => {
             {two}
           </div>
           <div className="about-image">
-            <img alt="Harsh Bafna" src={"/assets/about-harsh.webp"} />
+            <img alt="Harsh Bafna" src="/assets/about-harsh.webp" />
           </div>
         </div>
       </FadeInSection>

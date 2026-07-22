@@ -6,8 +6,8 @@ import FadeInSection from "./FadeInSection";
 const Experience = () => {
   return (
     <div id="experience">
-      <FadeInSection>
-        <div className="section-header ">
+            <FadeInSection>
+        <div className="section-header">
           <span className="section-title">/ experience</span>
         </div>
         <JobList />

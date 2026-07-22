@@ -39,11 +39,6 @@
   margin: 0;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
 a {
   text-decoration: none !important;
   color: var(--green-bright);
@@ -57,25 +52,8 @@ a:hover {
   width: 100%;
 }
 
-.rs-steps-horizontal .rs-steps-item-content {
-  text-align: left;
-}
-
 ::selection {
   background: var(--lightest-navy);
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  font-size: calc(10px + 2vmin);
 }
 
 .section-header {

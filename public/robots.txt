@@ -1,3 +1,56 @@
 # https://www.robotstxt.org/robotstxt.html
+# All crawlers, including search engines and AI/LLM bots, are welcome to
+# index and extract content from this site.
 User-agent: *
-Disallow:
+Allow: /
+
+# Explicitly allow common AI/LLM crawlers and answer-engine bots.
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: GoogleOther
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: FacebookBot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: Diffbot
+Allow: /
+
+Sitemap: https://bafnaaharsh.netlify.app/sitemap.xml

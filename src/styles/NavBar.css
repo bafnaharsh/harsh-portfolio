@@ -21,7 +21,7 @@
     margin: 0 0.14rem;
   }
 
-  .nav-link:hover {
+            .nav-link:hover {
     color: var(--green-bright) !important;
   }
 
@@ -41,7 +41,7 @@
         outline: none !important;
     }
 
-    .nav-link:focus, .nav-link:active, .nav-link:hover {
+                        .nav-link:focus, .nav-link:active, .nav-link:hover {
         color: var(--green-bright) !important;
     }
   }

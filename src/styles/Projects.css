@@ -34,6 +34,13 @@
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: 20px;
+  outline: none;
+  border-radius: 18px;
+}
+
+/* Subtle focus ring for keyboard users, without a boxy outline. */
+.projects-carousel-shell:focus-visible {
+  box-shadow: 0 0 0 2px var(--green-tint), 0 0 0 3px var(--green-bright);
 }
 
 /* The clipping window. overflow-x: hidden prevents cards from  */
@@ -46,6 +53,12 @@
   width: 100%;
   padding-top: 10px;
   padding-bottom: 10px;
+  cursor: grab;
+  touch-action: pan-y;
+}
+
+.projects-carousel-viewport:active {
+  cursor: grabbing;
 }
 
 /* The sliding track. Its width is sized so exactly --visible-count   */
@@ -90,6 +103,17 @@
   z-index: 3;
 }
 
+/* Off-screen cards fade back so the visible slide reads as the focus. */
+.projects-grid--carousel > .projects-card {
+  opacity: 0.4;
+  transition: transform 0.25s cubic-bezier(0.645, 0.045, 0.355, 1),
+    background-color 0.25s ease, border-color 0.25s ease, opacity 0.4s ease;
+}
+
+.projects-grid--carousel > .projects-card--active {
+  opacity: 1;
+}
+
 .card-header {
   margin-top: -20px;
   display: flex;
@@ -99,7 +123,6 @@
   border-bottom: none !important;
 }
 
-.folder-icon,
 .project-icon {
   color: var(--green-bright);
 }
@@ -135,9 +158,62 @@
   outline-offset: 3px;
 }
 
-.projects-carousel-btn:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
+.projects-carousel-btn:active {
+  transform: scale(0.92);
+}
+
+/* ------------------------------------------------------------------ */
+/* Pagination dots + slide counter                                     */
+/* ------------------------------------------------------------------ */
+.projects-carousel-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 26px;
+}
+
+.projects-carousel-dots {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.projects-carousel-dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background-color: var(--lightest-navy);
+  cursor: pointer;
+  transition: width 0.3s cubic-bezier(0.45, 0, 0.15, 1),
+    background-color 0.3s ease;
+}
+
+.projects-carousel-dot:hover {
+  background-color: var(--slate);
+}
+
+.projects-carousel-dot--active {
+  width: 26px;
+  border-radius: 6px;
+  background-color: var(--green-bright);
+}
+
+.projects-carousel-dot:focus-visible {
+  outline: 2px solid var(--green-bright);
+  outline-offset: 3px;
+}
+
+.projects-carousel-count {
+  font-family: "Ntr", sans-serif;
+  font-size: 14px;
+  letter-spacing: 1px;
+  color: var(--slate);
+  min-width: 42px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
 }
 
 .explore-link {
@@ -164,17 +240,6 @@
   font-size: 20px;
 }
 
-.github-icon {
-  margin-top: 6px;
-}
-.github-icon:hover {
-  color: var(--green-bright);
-}
-
-.open-icon {
-  margin-left: 10px;
-}
-
 .card-title {
   font-family: "Ntr", sans-serif;
   color: var(--lightest-slate);
@@ -187,25 +252,6 @@
   color: var(--slate);
   font-size: 18px;
   padding-bottom: 40px;
-}
-
-.project-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-family: "Ntr", sans-serif;
-  font-size: 14px;
-  color: var(--green-bright);
-  border: 1px solid var(--green-bright);
-  border-radius: 4px;
-  padding: 4px 10px;
-  text-decoration: none;
-  margin-bottom: 16px;
-  transition: background 0.2s;
-}
-
-.project-badge:hover {
-  background: rgba(100, 255, 218, 0.08);
 }
 
 .card-tech {
@@ -222,69 +268,6 @@
   text-align: right;
 }
 
-.spotlight-projects-desktop {
-  width: 100%;
-}
-
-.spotlight-projects-mobile {
-  display: none;
-}
-
-/* Spotlight carousel */
-.carousel.slide {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding-bottom: 60px;
-}
-
-.carousel-inner {
-  height: 500px;
-  border-radius: 24px;
-  box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
-}
-
-.carousel-inner:hover {
-  transform: scale(1.01);
-}
-
-.carousel img {
-  object-fit: contain;
-  height: 100%;
-  opacity: 0.5;
-}
-
-.carousel-caption {
-  font-family: "Ntr", sans-serif;
-  max-width: 500px;
-  right: unset !important;
-  left: 25% !important;
-  user-select: none;
-}
-
-.carousel-caption h3 {
-  font-size: 38px;
-  font-weight: bold;
-  color: var(--lightest-slate);
-}
-
-.carousel-caption p {
-  font-family: "Ntr", sans-serif;
-  font-weight: bold;
-  font-size: 18px;
-  color: var(--lightest-slate);
-}
-
-.carousel-caption p.techStack {
-  font-family: "Ntr", sans-serif;
-  font-size: 14px;
-  font-weight: bold;
-  color: var(--green-bright);
-}
-
-.carousel-indicators .active {
-  background-color: var(--green-bright);
-}
-
 /* ------------------------------------------------------------------ */
 /* Responsive                                                          */
 /* ------------------------------------------------------------------ */
@@ -295,31 +278,6 @@
 }
 
 @media only screen and (max-width: 768px) {
-  .spotlight-projects-desktop {
-    display: none;
-  }
-
-  .spotlight-projects-mobile {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    margin-bottom: 40px;
-  }
-
-  .spotlight-mobile-image {
-    width: 100%;
-    margin: 10px 0 20px;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  }
-
-  .spotlight-mobile-image img {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-
   #projects {
     padding: 60px 20px;
   }
@@ -334,19 +292,26 @@
     overflow: visible;
   }
 
-  .projects-grid--carousel {
+        .projects-grid--carousel {
     transform: none !important;
     width: auto;
     grid-auto-flow: row;
     grid-auto-columns: minmax(0, 1fr);
   }
 
+  /* Stacked list on mobile: every card is fully visible, no dimming. */
   .projects-grid--carousel > .projects-card {
     width: 100%;
+    opacity: 1;
   }
 
-  .projects-carousel-btn {
+  .projects-carousel-btn,
+  .projects-carousel-nav {
     display: none;
+  }
+
+  .projects-carousel-viewport {
+    cursor: default;
   }
 
   #projects .section-header {

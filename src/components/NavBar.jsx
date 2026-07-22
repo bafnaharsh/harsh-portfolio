@@ -35,7 +35,7 @@ const NavBar = () => {
       expanded={expanded}
       onToggle={(isExpanded) => setExpanded(isExpanded)}
     >
-      <Container>
+            <Container>
         <Navbar.Brand href="/">Harsh Bafna</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">

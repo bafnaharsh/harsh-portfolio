@@ -26,18 +26,12 @@ const PdfViewerModal = ({ title, src, onClose, shareUrl }) => {
     };
     document.addEventListener("keydown", handleKey);
     const { overflow } = document.body.style;
-    document.body.style.overflow = "hidden";
+        document.body.style.overflow = "hidden";
     return () => {
       document.removeEventListener("keydown", handleKey);
       document.body.style.overflow = overflow;
     };
   }, [onClose]);
-
-  // Reset the "Copied!" feedback each time the modal is opened, so a stale
-  // checkmark from a previous view can't linger.
-  useEffect(() => {
-    setCopied(false);
-  }, [shareUrl]);
 
   const handleCopy = async () => {
     try {

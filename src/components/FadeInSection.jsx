@@ -1,14 +1,18 @@
-import React from "react";
+import React, { useState, useRef, useEffect, memo } from "react";
 
-export default function FadeInSection(props) {
-  const [isVisible, setVisible] = React.useState(false);
-  const domRef = React.useRef();
-  React.useEffect(() => {
+// If IntersectionObserver isn't available, content is shown immediately.
+const supportsIO = typeof IntersectionObserver !== "undefined";
+
+function FadeInSection({ delay, children }) {
+  const [isVisible, setVisible] = useState(!supportsIO);
+  const domRef = useRef();
+
+  useEffect(() => {
     const node = domRef.current;
-    if (!node) return;
+    if (!node || !supportsIO) return;
 
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
         if (entry.isIntersecting) {
           setVisible(true);
           observer.unobserve(node);
@@ -17,19 +21,18 @@ export default function FadeInSection(props) {
     });
 
     observer.observe(node);
-    return () => {
-      if (node) {
-        observer.unobserve(node);
-      }
-    };
+    return () => observer.disconnect();
   }, []);
+
   return (
     <div
       className={`fade-in-section ${isVisible ? "is-visible" : ""}`}
-      style={{ transitionDelay: `${props.delay}` }}
+      style={{ transitionDelay: delay }}
       ref={domRef}
     >
-      {props.children}
+      {children}
     </div>
   );
 }
+
+export default memo(FadeInSection);

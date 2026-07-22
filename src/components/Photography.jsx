@@ -1,19 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import "../styles/Photography.css";
 import FadeInSection from "./FadeInSection";
+import Lightbox from "./Lightbox";
 import { Link } from "react-router-dom";
-
-const photos = [
-  { src: "/assets/photography/kediler.jpeg", title: "street cats" },
-  { src: "/assets/photography/IMG_20210428_183550.jpg", title: "evening frame" },
-  { src: "/assets/photography/IMG_20210420_100741_174.jpg", title: "open sky" },
-  { src: "/assets/photography/IMG_20210409_171430.jpg", title: "quiet corner" },
-  { src: "/assets/photography/IMG_20210329_082927_984.jpg", title: "morning light" },
-  { src: "/assets/photography/1000014681~3.jpg", title: "city texture" },
-];
+import { photos } from "../data/photos";
 
 const Photography = () => {
-  const [hiddenPhotos, setHiddenPhotos] = React.useState(() => new Set());
+  const [hiddenPhotos, setHiddenPhotos] = useState(() => new Set());
+  const [lightboxIndex, setLightboxIndex] = useState(null);
   const visiblePhotos = photos.filter((photo) => !hiddenPhotos.has(photo.src));
 
   return (
@@ -37,21 +31,37 @@ const Photography = () => {
                 Add photos to public/assets/photography to show this collection.
               </div>
             </FadeInSection>
-          )}
+                    )}
           {visiblePhotos.map((photo, i) => (
             <FadeInSection key={photo.src} delay={(i + 1) * 100 + "ms"}>
-              <div className="photography-card">
+              <button
+                type="button"
+                className="photography-card"
+                onClick={() => setLightboxIndex(i)}
+                aria-label={`View ${photo.title} full size`}
+              >
                 <img
                   src={photo.src}
                   alt={photo.title}
                   className="photography-image"
+                  loading="lazy"
+                  decoding="async"
                   onError={() => setHiddenPhotos((current) => new Set(current).add(photo.src))}
                 />
-              </div>
+              </button>
             </FadeInSection>
           ))}
         </div>
       </div>
+
+      {lightboxIndex !== null && (
+        <Lightbox
+          photos={visiblePhotos}
+          index={lightboxIndex}
+          onIndex={setLightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+        />
+      )}
     </div>
   );
 };

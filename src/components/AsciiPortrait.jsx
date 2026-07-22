@@ -1,8 +1,17 @@
 import React, { useRef, useEffect, useState } from "react";
-import { asciiData } from "../assets/asciiData";
 
 // Module-level cache to persist between remounts
 const memoryCache = {};
+
+// The pre-computed ASCII particle data is ~290KB, so it is loaded lazily and
+// cached on first use instead of being bundled into the initial payload.
+let asciiDataPromise = null;
+const loadAsciiData = () => {
+  if (!asciiDataPromise) {
+    asciiDataPromise = import("../assets/asciiData").then((m) => m.asciiData);
+  }
+  return asciiDataPromise;
+};
 
 const calculateSize = (width) => {
   if (width <= 480) {
@@ -105,39 +114,49 @@ const AsciiPortrait = () => {
           });
         }
       }
-    }
+        }
     return rawParticles;
   };
 
   useEffect(() => {
     const isMobileSize = size <= 280;
-    
-    // 1. Check pre-calculated static data
-    if (asciiData[size]) {
-      particlesRef.current = createParticlesFromRaw(asciiData[size], isMobileSize);
-      setDataReady(true);
-      startTimeRef.current = performance.now();
-      return;
-    }
+    let cancelled = false;
 
-    // 2. Check memory cache
-    if (memoryCache[size]) {
-      particlesRef.current = createParticlesFromRaw(memoryCache[size], isMobileSize);
-      setDataReady(true);
-      startTimeRef.current = performance.now();
-      return;
-    }
-
-    // 3. Fallback to image processing
-    const img = new Image();
-    img.crossOrigin = "Anonymous";
-    img.src = "/profile.webp";
-    img.onload = () => {
-      const raw = processImage(img, size);
-      memoryCache[size] = raw;
+    const applyRaw = (raw) => {
+      if (cancelled) return;
       particlesRef.current = createParticlesFromRaw(raw, isMobileSize);
       setDataReady(true);
       startTimeRef.current = performance.now();
+    };
+
+    // 1. Memory cache (also seeded from the lazily-loaded static data).
+    if (memoryCache[size]) {
+      applyRaw(memoryCache[size]);
+      return;
+    }
+
+    // 2. Lazily loaded pre-computed data.
+    loadAsciiData().then((asciiData) => {
+      if (cancelled) return;
+      if (asciiData[size]) {
+        memoryCache[size] = asciiData[size];
+        applyRaw(asciiData[size]);
+        return;
+      }
+
+      // 3. Fallback to on-the-fly image processing for unknown sizes.
+      const img = new Image();
+      img.crossOrigin = "Anonymous";
+      img.src = "/profile.webp";
+      img.onload = () => {
+        const raw = processImage(img, size);
+        memoryCache[size] = raw;
+        applyRaw(raw);
+      };
+    });
+
+    return () => {
+      cancelled = true;
     };
   }, [size]);
 
@@ -155,6 +174,13 @@ const AsciiPortrait = () => {
     let animationId;
 
     const draw = () => {
+      // Pause the render loop entirely while the tab is hidden so we don't
+      // burn CPU/GPU cycles in the background.
+      if (document.hidden) {
+        animationId = requestAnimationFrame(draw);
+        return;
+      }
+
       animationId = requestAnimationFrame(draw);
 
       ctx.clearRect(0, 0, size, size);

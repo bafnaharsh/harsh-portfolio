@@ -236,7 +236,7 @@ const RobotGame = ({ active }) => {
       document.querySelectorAll(sel).forEach((el) => {
         const r = el.getBoundingClientRect();
         if (r.width < 60 || r.height > 100) return;
-        const docTop = r.top + scrollY;
+                const docTop = r.top + scrollY;
         if (docTop > scrollY + window.innerHeight + 200 || docTop + r.height < scrollY - 200) return;
         platforms.push({ x: r.left, y: docTop, w: r.width });
       });
@@ -246,6 +246,10 @@ const RobotGame = ({ active }) => {
 
   useEffect(() => {
     if (!active) { cancelAnimationFrame(animRef.current); return; }
+
+    // Capture the keys Set locally so the cleanup below references the same
+    // instance that this effect wired up, satisfying the exhaustive-deps rule.
+    const keys = keysRef.current;
 
     window.scrollTo(0, 0);
 
@@ -340,7 +344,7 @@ const RobotGame = ({ active }) => {
       if (["Space","ArrowUp","ArrowLeft","ArrowRight","ArrowDown"].includes(e.code))
         e.preventDefault();
     };
-    const onKeyUp = (e) => keysRef.current.delete(e.code);
+    const onKeyUp = (e) => keys.delete(e.code);
     window.addEventListener("keydown", onKeyDown);
     window.addEventListener("keyup",   onKeyUp);
 
@@ -486,14 +490,14 @@ const RobotGame = ({ active }) => {
       canvas.width  = window.innerWidth;
       canvas.height = window.innerHeight;
     };
-    window.addEventListener("resize", onResize);
+        window.addEventListener("resize", onResize);
 
     return () => {
       cancelAnimationFrame(animRef.current);
       window.removeEventListener("keydown", onKeyDown);
       window.removeEventListener("keyup",   onKeyUp);
       window.removeEventListener("resize",  onResize);
-      keysRef.current.clear();
+      keys.clear();
       jumpLatchRef.current = false;
     };
   }, [active, restartKey, getPlatforms, restart]);

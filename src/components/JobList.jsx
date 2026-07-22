@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Tabs, Tab, Typography, Box, useTheme, useMediaQuery } from "@mui/material";
 import FadeInSection from "./FadeInSection";
@@ -46,8 +46,8 @@ function a11yProps(index, isMobile) {
 }
 
 const JobList = () => {
-  const [value, setValue] = React.useState(0);
-  const [activeCertificate, setActiveCertificate] = React.useState(null);
+  const [value, setValue] = useState(0);
+  const [activeCertificate, setActiveCertificate] = useState(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const internshipCertificate = getCertificateBySlug("jp-morgan-forage-internship");

@@ -25,6 +25,8 @@ const MarkdownLink = ({ href = "", children }) => {
 const AgentView = ({ pathname }) => {
   const [copied, setCopied] = useState(false);
   const markdown = useMemo(() => renderRouteMarkdown(portfolio, pathname), [pathname]);
+  // The document this bar describes: "/" for the profile, "/resume", etc.
+  const route = (pathname || "/").replace(/\/+$/, "") || "/";
 
   const copy = async () => {
     try {
@@ -51,7 +53,10 @@ const AgentView = ({ pathname }) => {
   return (
     <main className="agent-view" id="agent-view">
       <div className="agent-view-bar">
-        <span className="agent-view-label">markdown · text/markdown</span>
+        <span className="agent-view-label">
+          markdown · text/markdown
+          <span className="agent-view-path">{route}</span>
+        </span>
         <button type="button" className="agent-view-copy" onClick={copy} aria-live="polite">
           {copied ? <CheckRoundedIcon sx={{ fontSize: 16 }} /> : <ContentCopyRoundedIcon sx={{ fontSize: 16 }} />}
           {copied ? "Copied!" : "Copy raw Markdown"}

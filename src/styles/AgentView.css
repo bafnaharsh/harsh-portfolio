@@ -1,45 +1,68 @@
-/* Agent view: a README-like rendering of the markdown document. */
+/* Agent view: a README-like rendering of the markdown document.
+   Monospace and technical, but tuned for reading: ~76ch measure,
+   1.7 line-height, numbered h2 sections, muted meta lines under each h3,
+   and inline code rendered as small chips. */
 .agent-view {
   width: 100%;
-  max-width: 72ch;
+  max-width: 76ch;
   margin: 0 auto;
-  padding: 96px 20px 120px;
+  padding: 96px 24px 120px;
   box-sizing: border-box;
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, "Courier New", monospace;
-  font-size: 15px;
-  line-height: 1.65;
+  font-size: 16px;
+  line-height: 1.7;
   color: var(--lightest-slate);
+  overflow-wrap: break-word;
 }
+
+/* ---- top bar ------------------------------------------------------------ */
 
 .agent-view-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding-bottom: 14px;
-  margin-bottom: 26px;
+  flex-wrap: wrap;
+  padding: 10px 0 14px;
+  margin-bottom: 40px;
   border-bottom: 1px solid var(--lightest-navy);
 }
 
 .agent-view-label {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
   font-size: 12px;
   letter-spacing: 0.8px;
   text-transform: uppercase;
   color: var(--slate);
 }
 
+.agent-view-path {
+  padding: 2px 8px;
+  border-radius: 5px;
+  background: var(--light-navy);
+  color: var(--green-bright);
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  text-transform: none;
+}
+
 .agent-view-copy {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
+  gap: 8px;
   min-height: 44px;
-  padding: 6px 14px;
+  padding: 6px 16px;
   border-radius: 6px;
   border: 1px solid var(--green-bright);
   background: transparent;
   color: var(--green-bright);
   font-family: inherit;
   font-size: 13px;
+  letter-spacing: 0.3px;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
@@ -53,65 +76,141 @@
   outline-offset: 2px;
 }
 
+/* ---- document ----------------------------------------------------------- */
+
+.agent-view-doc {
+  counter-reset: agent-section;
+}
+
+.agent-view-doc > *:first-child {
+  margin-top: 0;
+}
+
 .agent-view-doc h1,
 .agent-view-doc h2,
 .agent-view-doc h3 {
   font-family: inherit;
   color: var(--white);
-  line-height: 1.3;
-  margin: 1.6em 0 0.5em;
+  line-height: 1.25;
+  font-weight: 600;
 }
 
+/* Title block: `# Name`, then the role · location line, then the one-liner. */
 .agent-view-doc h1 {
-  font-size: 28px;
-  margin-top: 0;
+  font-size: 32px;
+  letter-spacing: -0.5px;
+  margin: 0 0 0.4em;
 }
 
-.agent-view-doc h2 {
-  font-size: 20px;
-  padding-bottom: 6px;
-  border-bottom: 1px solid var(--lightest-navy);
+.agent-view-doc h1 + p {
+  margin: 0 0 0.9em;
+  font-size: 14px;
+  letter-spacing: 0.6px;
+  color: var(--slate);
 }
 
-.agent-view-doc h2::before,
-.agent-view-doc h3::before {
+.agent-view-doc h1 + p strong {
   color: var(--green-bright);
-  margin-right: 8px;
+  font-weight: 600;
+}
+
+.agent-view-doc h1 + p + p {
+  margin: 0;
+  color: var(--light-slate);
+}
+
+/* Section headings are numbered 01. 02. 03. — no extra rule, the `---`
+   between sections already draws the line. */
+.agent-view-doc h2 {
+  counter-increment: agent-section;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-size: 21px;
+  letter-spacing: 0.2px;
+  margin: 1.8em 0 1.1em;
 }
 
 .agent-view-doc h2::before {
-  content: "##";
+  content: counter(agent-section, decimal-leading-zero) ".";
+  flex: none;
+  font-size: 0.72em;
+  color: var(--green-bright);
 }
 
+/* Entries: `### Role — Company` with a small green marker. */
 .agent-view-doc h3 {
-  font-size: 16px;
+  font-size: 17px;
+  margin: 2em 0 0.45em;
 }
 
 .agent-view-doc h3::before {
-  content: "###";
+  content: "▸";
+  color: var(--green-bright);
+  margin-right: 10px;
+  font-size: 0.85em;
 }
 
-.agent-view-doc p,
-.agent-view-doc li {
+.agent-view-doc h2 + h3 {
+  margin-top: 0;
+}
+
+/* The italic line right after an h3 is the entry's meta line
+   (dates · location, or company · tags) — keep it quiet. */
+.agent-view-doc h3 + p em {
+  display: inline-block;
+  font-style: normal;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  line-height: 1.6;
+  color: var(--slate);
+}
+
+.agent-view-doc h3 + p {
+  margin: 0 0 0.9em;
+}
+
+.agent-view-doc p {
+  margin: 0 0 1.15em;
   color: var(--light-slate);
 }
 
 .agent-view-doc ul {
-  padding-left: 1.4em;
+  margin: 0 0 1.3em;
+  padding-left: 1.5em;
+  list-style: none;
 }
 
 .agent-view-doc li {
-  margin: 0.25em 0;
+  position: relative;
+  margin: 0 0 0.55em;
+  color: var(--light-slate);
+}
+
+.agent-view-doc li::before {
+  content: "–";
+  position: absolute;
+  left: -1.5em;
+  color: var(--green-bright);
+}
+
+.agent-view-doc li > p {
+  margin: 0;
 }
 
 .agent-view-doc strong {
   color: var(--lightest-slate);
+  font-weight: 600;
+}
+
+.agent-view-doc em {
+  color: var(--light-slate);
 }
 
 .agent-view-doc a {
   color: var(--green-bright);
   text-decoration: underline !important;
-  text-decoration-color: rgba(100, 255, 218, 0.4);
+  text-decoration-color: rgba(100, 255, 218, 0.35);
   text-underline-offset: 3px;
 }
 
@@ -127,21 +226,57 @@
   border-radius: 2px;
 }
 
+/* Stack / tag words become small chips. */
 .agent-view-doc code {
+  display: inline-block;
   font-family: inherit;
-  font-size: 0.9em;
+  font-size: 0.8em;
+  line-height: 1.7;
   background: var(--light-navy);
-  padding: 1px 6px;
-  border-radius: 4px;
+  color: var(--green-bright);
+  border: 1px solid var(--lightest-navy);
+  padding: 0 8px;
+  margin: 2px 1px;
+  border-radius: 6px;
+  letter-spacing: 0.3px;
+}
+
+.agent-view-doc hr {
+  height: 1px;
+  border: 0;
+  background: var(--lightest-navy);
+  opacity: 1;
+  margin: 2.6em 0 1.8em;
 }
 
 @media (max-width: 768px) {
   .agent-view {
-    padding: 84px 16px 110px;
-    font-size: 14px;
+    padding: 84px 18px 110px;
+    font-size: 15px;
+  }
+
+  .agent-view-bar {
+    margin-bottom: 32px;
+  }
+
+  .agent-view-copy {
+    flex: 1 1 auto;
   }
 
   .agent-view-doc h1 {
-    font-size: 24px;
+    font-size: 26px;
+  }
+
+  .agent-view-doc h2 {
+    font-size: 19px;
+    gap: 10px;
+  }
+
+  .agent-view-doc h3 {
+    font-size: 16px;
+  }
+
+  .agent-view-doc hr {
+    margin: 2.2em 0 1.6em;
   }
 }

@@ -1,0 +1,11 @@
+# Netlify build + runtime configuration.
+# Publish directory (the folder Netlify actually uploads) is dist/.
+# Redirect and header rules live in public/_redirects and public/_headers,
+# which Vite copies into dist/ verbatim.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"

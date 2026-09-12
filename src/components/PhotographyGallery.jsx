@@ -4,7 +4,7 @@ import FadeInSection from "./FadeInSection";
 import Lightbox from "./Lightbox";
 import { Link } from "react-router-dom";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
-import { photos as sharedPhotos } from "../data/photos";
+import { photos as sharedPhotos, photographyDescription } from "../data/photos";
 
 // Gallery shows the collection in reverse of the homepage strip.
 const photos = [...sharedPhotos].reverse();
@@ -23,9 +23,7 @@ const PhotographyGallery = () => {
         <span className="section-title">/ photography</span>
       </div>
       <FadeInSection delay="200ms">
-        <div className="gallery-description">
-          A small collection of photos, gathered from travel, streets, and quiet everyday frames.
-        </div>
+        <div className="gallery-description">{photographyDescription}</div>
       </FadeInSection>
       <div className="gallery-grid">
         {visiblePhotos.length === 0 && (

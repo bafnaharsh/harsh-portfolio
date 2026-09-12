@@ -1,26 +1,30 @@
 import React from "react";
 import "../styles/About.css";
 import FadeInSection from "./FadeInSection";
+import { portfolio } from "../data/portfolio";
+
+const { about, profile } = portfolio;
+
+// Renders one paragraph's segments, reproducing the original inline markup:
+// bold spans become <b>, linked spans become <a>.
+const Paragraph = ({ segments }) => (
+  <p>
+    {segments.map((seg, i) => {
+      if (seg.href) {
+        return (
+          <a key={i} href={seg.href}>
+            {seg.text}
+          </a>
+        );
+      }
+      if (seg.bold) return <b key={i}>{seg.text}</b>;
+      return <React.Fragment key={i}>{seg.text}</React.Fragment>;
+    })}
+  </p>
+);
 
 const About = () => {
-  const one = (
-    <p>
-      I am currently a <b>Machine Learning Engineer</b> at
-      <a href="https://quantiphi.com/"> Quantiphi</a>, where I build
-      generative AI, RAG, and multi-agent systems for production enterprise
-      workflows. Previously, I worked with{" "}
-      <a href="https://www.jpmorganchase.com/">JP Morgan Chase & Co.</a>
-    </p>
-  );
-  const two = (
-    <p>
-      I like systems that feel simple on the surface but do serious work
-      underneath: retrieval pipelines, natural-language analytics, and AI tools
-      that make data easier to use.
-    </p>
-  );
-
-  const techStack = ["Python", "SQL", "LangChain", "Google ADK", "Vertex AI", "FastAPI"];
+  const [one, two] = about.paragraphs;
 
   return (
     <div id="about">
@@ -30,19 +34,19 @@ const About = () => {
         </div>
         <div className="about-content">
           <div className="about-description">
-            {one}
-            {"Here are some technologies I have been working with:"}
+            <Paragraph segments={one} />
+            {about.techIntro}
             <ul className="tech-stack">
-              {techStack.map((techItem, i) => (
+              {about.techStack.map((techItem, i) => (
                 <FadeInSection key={i} delay={(i + 1) * 100 + "ms"}>
                   <li>{techItem}</li>
                 </FadeInSection>
               ))}
             </ul>
-            {two}
+            <Paragraph segments={two} />
           </div>
           <div className="about-image">
-            <img alt="Harsh Bafna" src="/assets/about-harsh.webp" />
+            <img alt={profile.aboutImageAlt} src={profile.aboutImage} />
           </div>
         </div>
       </FadeInSection>

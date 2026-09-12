@@ -1,23 +1,16 @@
 import React from "react";
 import "../styles/Education.css";
 import FadeInSection from "./FadeInSection";
+import { portfolio } from "../data/portfolio";
 
-const educationItems = [
-  {
-    school: "B.M.S. College of Engineering",
-    location: "Bangalore, India",
-    program: "Bachelor of Engineering, Electronics & Instrumentation Engineering",
-    detail: "GPA: 8.3/10",
-    duration: "2020 - 2024",
-  },
-  {
-    school: "S.Tech IT School",
-    location: "Rajasthan, India",
-    program: "Higher Secondary School Certificate, PCM",
-    detail: "Percentage: 82.6%",
-    duration: "2019 - 2020",
-  },
-];
+// View model derived from the single source of truth.
+const educationItems = portfolio.education.map((item) => ({
+  school: item.institution,
+  location: item.location,
+  program: item.qualification,
+  detail: item.detail,
+  duration: `${item.start} - ${item.end}`,
+}));
 
 const Education = () => {
   return (

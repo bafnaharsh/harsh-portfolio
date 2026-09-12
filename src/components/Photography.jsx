@@ -3,7 +3,7 @@ import "../styles/Photography.css";
 import FadeInSection from "./FadeInSection";
 import Lightbox from "./Lightbox";
 import { Link } from "react-router-dom";
-import { photos } from "../data/photos";
+import { photos, photographyDescription } from "../data/photos";
 
 const Photography = () => {
   const [hiddenPhotos, setHiddenPhotos] = useState(() => new Set());
@@ -19,9 +19,7 @@ const Photography = () => {
         </Link>
       </div>
       <FadeInSection delay="200ms">
-        <div className="photography-description">
-          A small collection of photos, gathered from travel, streets, and quiet everyday frames.
-        </div>
+        <div className="photography-description">{photographyDescription}</div>
       </FadeInSection>
       <div className="photography-container">
         <div className="photography-grid">

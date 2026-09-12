@@ -6,6 +6,9 @@ import ArticleRoundedIcon from "@mui/icons-material/ArticleRounded";
 import FadeInSection from "./FadeInSection";
 import AsciiPortrait from "./AsciiPortrait";
 import PdfViewerModal from "./PdfViewerModal";
+import { portfolio } from "../data/portfolio";
+
+const { profile, links } = portfolio;
 
 const Intro = () => {
   const [showResume, setShowResume] = useState(false);
@@ -17,22 +20,17 @@ const Intro = () => {
       </div>
       <div className="intro-block">
         <div className="intro-title">
-          {"hi, "}
+          {profile.greeting.before}
           <span className="intro-name">
-            <TypeAnimation sequence={["harsh"]} wrapper="span" cursor={false} repeat={0} />
+            <TypeAnimation sequence={[profile.greeting.name]} wrapper="span" cursor={false} repeat={0} />
           </span>
-          {" here."}
+          {profile.greeting.after}
           <span className="intro-cursor">|</span>
         </div>
         <FadeInSection>
-          <div className="intro-desc">
-            Machine learning engineer specializing in generative AI, multi-agent
-            systems, and production-grade LLM applications. I build retrieval
-            and analytics systems that turn messy enterprise data into useful
-            answers.
-          </div>
+          <div className="intro-desc">{profile.summary}</div>
           <div className="intro-actions">
-            <a href="mailto:Harshbafna26@gmail.com" className="intro-contact">
+            <a href={links.email} className="intro-contact">
               <EmailRoundedIcon />
               {" Say hi!"}
             </a>
@@ -48,8 +46,8 @@ const Intro = () => {
         </FadeInSection>
         {showResume && (
           <PdfViewerModal
-            title="Resume — Harsh Bafna"
-            src="/HarshBafna.pdf"
+            title={`Resume — ${profile.name}`}
+            src={links.resume}
             shareUrl={`${window.location.origin}/resume`}
             onClose={() => setShowResume(false)}
           />

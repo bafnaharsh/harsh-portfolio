@@ -6,10 +6,11 @@ import ArticleRoundedIcon from "@mui/icons-material/ArticleRounded";
 import FadeInSection from "./FadeInSection";
 import "../styles/ArtGallery.css";
 import "../styles/Certificates.css";
+import { portfolio } from "../data/portfolio";
 
-// Resume source, kept in one place so the homepage button and this page stay
-// in sync. Mirrors how certificates.js centralizes cert metadata.
-const RESUME_FILE = "/HarshBafna.pdf";
+// Resume source comes from the single source of truth so the homepage button
+// and this page can never drift apart.
+const RESUME_FILE = portfolio.links.resume;
 
 // Standalone, shareable resume page at /resume. Renders the full PDF inline
 // (fit-to-page) plus a back link to the home page. Mirrors the /cert/:slug
@@ -30,7 +31,7 @@ const ResumeViewer = () => (
         </span>
         <div className="cert-page-meta">
           <h1 className="cert-page-title">Resume</h1>
-          <span className="cert-page-issuer">Harsh Bafna</span>
+          <span className="cert-page-issuer">{portfolio.profile.name}</span>
         </div>
         <a
           className="cert-page-open"
@@ -47,7 +48,7 @@ const ResumeViewer = () => (
     <FadeInSection delay="150ms">
       <div className="cert-page-frame-wrap">
         <iframe
-          title="Harsh Bafna resume"
+          title={`${portfolio.profile.name} resume`}
           src={`${RESUME_FILE}#view=FitH`}
           className="cert-page-frame"
         />

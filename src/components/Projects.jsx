@@ -12,44 +12,24 @@ import NorthEastRoundedIcon from "@mui/icons-material/NorthEastRounded";
 import FadeInSection from "./FadeInSection";
 import PdfViewerModal from "./PdfViewerModal";
 import { certificates } from "../data/certificates";
+import { portfolio } from "../data/portfolio";
 
-const projects = [
-  {
-    title: "RCA, Segmentation & NL2SQL Bot",
-    company: "Quantiphi",
-    desc: "Production multi-agent analytics platform that lets business users query structured enterprise data through natural-language chat.",
-    techStack: "Python, SQL, Google ADK, LLMs, RAG, AI Agents",
-    icon: StorageRoundedIcon,
-  },
-  {
-    title: "AI Search & Recommendation Engine",
-    company: "Quantiphi",
-    desc: "Conversational product discovery system over an 80K+ SKU catalog, combining Vertex AI Search with recommendation models.",
-    techStack: "Python, Vertex AI Search, LLMs, Ranking",
-    icon: TravelExploreRoundedIcon,
-  },
-  {
-    title: "AI Email Campaign Generator",
-    company: "Quantiphi",
-    desc: "AI workflow that scrapes property themes and metadata, then generates polished marketing emails with enhanced imagery.",
-    techStack: "Python, LLMs, Web Scraping, NLP, Imagen",
-    icon: MarkEmailReadRoundedIcon,
-  },
-  {
-    title: "Lead Hotspot Detection",
-    company: "Quantiphi",
-    desc: "Hybrid ML and rules-based system for predicting lead-contamination hotspots from SDWIS public water system data.",
-    techStack: "Python, LangChain, LLMs, EDA, Feature Engineering",
-    icon: CrisisAlertRoundedIcon,
-  },
-  {
-    title: "Real-Time Market Visualization",
-    company: "JP Morgan Chase & Co.",
-    desc: "Streaming interface and live graphing workflow for monitoring historical stock-correlation behavior at high throughput.",
-    techStack: "Perspective, Real-Time Data Streaming, Visualization",
-    icon: ShowChartRoundedIcon,
-  },
-];
+// UI-only decoration per project; the data lives in portfolio.js.
+const PROJECT_ICONS = {
+  "rca-segmentation-nl2sql-bot": StorageRoundedIcon,
+  "ai-search-recommendation-engine": TravelExploreRoundedIcon,
+  "ai-email-campaign-generator": MarkEmailReadRoundedIcon,
+  "lead-hotspot-detection": CrisisAlertRoundedIcon,
+  "real-time-market-visualization": ShowChartRoundedIcon,
+};
+
+const projects = portfolio.projects.map((project) => ({
+  title: project.title,
+  company: project.company,
+  desc: project.summary,
+  techStack: project.stack.join(", "),
+  icon: PROJECT_ICONS[project.slug] ?? StorageRoundedIcon,
+}));
 
 // Largest number of cards that can ever be shown side by side. Arrows are
 // only rendered when there are more projects than this.

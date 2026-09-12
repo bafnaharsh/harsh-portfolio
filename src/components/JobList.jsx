@@ -4,6 +4,21 @@ import { Tabs, Tab, Typography, Box, useTheme, useMediaQuery } from "@mui/materi
 import FadeInSection from "./FadeInSection";
 import PdfViewerModal from "./PdfViewerModal";
 import { getCertificateBySlug } from "../data/certificates";
+import { portfolio } from "../data/portfolio";
+
+// View model derived from the single source of truth, keyed by company the
+// way the tabs were originally built.
+const experienceItems = Object.fromEntries(
+  portfolio.experience.map((job) => [
+    job.company,
+    {
+      jobTitle: `${job.role} @`,
+      duration: `${job.start} - ${job.end}`,
+      desc: job.bullets,
+      certificateSlug: job.certificateSlug,
+    },
+  ])
+);
 
 function TabPanel(props) {
   const { children, value, index, isMobile, ...other } = props;
@@ -50,29 +65,6 @@ const JobList = () => {
   const [activeCertificate, setActiveCertificate] = useState(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const internshipCertificate = getCertificateBySlug("jp-morgan-forage-internship");
-
-  const experienceItems = {
-    Quantiphi: {
-      jobTitle: "Machine Learning Engineer @",
-      duration: "FEB 2024 - PRESENT",
-      desc: [
-        "Led 5+ ML engineers in a 24+ member team to ship production multi-agent systems for natural-language enterprise analytics.",
-        "Architected ADK-based agents with RAG over 14+ structured data sources, including Kafka topics, Google Ads, and Google Analytics schemas.",
-        "Built AI search, recommendation, campaign-generation, and lead-hotspot workflows that reduced analysis and drafting cycles from days to minutes.",
-      ],
-    },
-    "JP Morgan Chase & Co.": {
-      jobTitle: "Software Engineer Intern @",
-      duration: "NOV 2022 - SEP 2023",
-      desc: [
-        "Designed a real-time data streaming interface capable of processing 100,000+ data points per second.",
-        "Used JP Morgan Chase's Perspective visualization tool to build live financial correlation graphs.",
-        "Implemented upper and lower-bound indicators for real-time monitoring of stock-correlation metrics.",
-      ],
-    },
-  };
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -149,15 +141,18 @@ const JobList = () => {
                 </FadeInSection>
               ))}
             </ul>
-            {key === "JP Morgan Chase & Co." && internshipCertificate && (
-              <button
-                type="button"
-                className="joblist-cert-button"
-                onClick={() => setActiveCertificate(internshipCertificate)}
-              >
-                View internship certificate
-              </button>
-            )}
+            {experienceItems[key].certificateSlug &&
+              getCertificateBySlug(experienceItems[key].certificateSlug) && (
+                <button
+                  type="button"
+                  className="joblist-cert-button"
+                  onClick={() =>
+                    setActiveCertificate(getCertificateBySlug(experienceItems[key].certificateSlug))
+                  }
+                >
+                  View internship certificate
+                </button>
+              )}
           </TabPanel>
         ))}
       </Box>

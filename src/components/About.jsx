@@ -30,7 +30,7 @@ const About = () => {
     <div id="about">
             <FadeInSection>
         <div className="section-header">
-          <span className="section-title">/ about me</span>
+          <h2 className="section-title">/ about me</h2>
         </div>
         <div className="about-content">
           <div className="about-description">

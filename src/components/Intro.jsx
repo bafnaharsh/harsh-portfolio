@@ -19,14 +19,14 @@ const Intro = () => {
         <AsciiPortrait />
       </div>
       <div className="intro-block">
-        <div className="intro-title">
+        <h1 className="intro-title">
           {profile.greeting.before}
           <span className="intro-name">
             <TypeAnimation sequence={[profile.greeting.name]} wrapper="span" cursor={false} repeat={0} />
           </span>
           {profile.greeting.after}
-          <span className="intro-cursor">|</span>
-        </div>
+          <span className="intro-cursor" aria-hidden="true">|</span>
+        </h1>
         <FadeInSection>
           <div className="intro-desc">{profile.summary}</div>
           <div className="intro-actions">

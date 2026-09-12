@@ -77,6 +77,8 @@ a:hover {
   color: var(--lightest-slate);
   font-size: 46px;
   font-weight: bold;
+  /* Rendered as a heading element (h1/h2) or <p>; reset their default margins. */
+  margin: 0;
   display: inline-block;
   max-width: 100%;
   line-height: 1.2;

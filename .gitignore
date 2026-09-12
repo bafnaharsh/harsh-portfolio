@@ -16,6 +16,9 @@ dist-ssr
 .netlify
 deno.lock
 
+# Scratch build outputs used by local verification
+.tmp-dist-*
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

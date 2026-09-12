@@ -34,6 +34,11 @@
   font-family: "NTR", sans-serif;
   font-size: 80px;
   color: var(--lightest-slate);
+  /* Rendered as <h1>; neutralise Bootstrap's heading defaults (margin,
+     weight, line-height) so it renders exactly as the previous <div>. */
+  margin: 0;
+  font-weight: 400;
+  line-height: inherit;
 }
 
 .intro-cursor {

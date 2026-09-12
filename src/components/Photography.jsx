@@ -13,7 +13,7 @@ const Photography = () => {
   return (
     <div id="photography">
       <div className="section-header">
-        <span className="section-title">/ photography</span>
+        <h2 className="section-title">/ photography</h2>
         <Link to="/photography" className="explore-link">
           Explore collection
         </Link>

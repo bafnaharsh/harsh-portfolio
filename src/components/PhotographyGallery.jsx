@@ -20,7 +20,7 @@ const PhotographyGallery = () => {
         <Link to="/" className="back-button">
           <ArrowBackRoundedIcon />
         </Link>
-        <span className="section-title">/ photography</span>
+        <h1 className="section-title">/ photography</h1>
       </div>
       <FadeInSection delay="200ms">
         <div className="gallery-description">{photographyDescription}</div>

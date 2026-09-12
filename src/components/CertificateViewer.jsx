@@ -22,7 +22,7 @@ const CertificateViewer = () => {
           <Link to="/#projects" className="back-button">
             <ArrowBackRoundedIcon />
           </Link>
-          <span className="section-title">/ certificate not found</span>
+          <h1 className="section-title">/ certificate not found</h1>
         </div>
         <FadeInSection>
           <p className="cert-not-found">
@@ -44,7 +44,7 @@ const CertificateViewer = () => {
         <Link to="/#projects" className="back-button">
           <ArrowBackRoundedIcon />
         </Link>
-        <span className="section-title">/ {cert.title.toLowerCase()}</span>
+        <p className="section-title">/ {cert.title.toLowerCase()}</p>
       </div>
 
       <FadeInSection>

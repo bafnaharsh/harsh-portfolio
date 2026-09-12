@@ -137,7 +137,7 @@ const Projects = () => {
   return (
     <div id="projects">
             <div className="section-header">
-        <span className="section-title">/ software &amp; certifications</span>
+        <h2 className="section-title">/ software &amp; certifications</h2>
       </div>
       <div className="project-container">
         <div

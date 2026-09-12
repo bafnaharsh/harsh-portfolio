@@ -16,7 +16,7 @@ const Education = () => {
   return (
     <div id="education">
       <div className="section-header">
-        <span className="section-title">/ education</span>
+        <h2 className="section-title">/ education</h2>
       </div>
       <div className="education-list">
         {educationItems.map((item, i) => (

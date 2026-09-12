@@ -21,7 +21,7 @@ const ResumeViewer = () => (
       <Link to="/" className="back-button">
         <ArrowBackRoundedIcon />
       </Link>
-      <span className="section-title">/ resume</span>
+      <p className="section-title">/ resume</p>
     </div>
 
     <FadeInSection>

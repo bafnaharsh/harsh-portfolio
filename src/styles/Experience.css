@@ -75,6 +75,16 @@
   color: var(--lightest-slate) !important;
 }
 
+/* The blanket `outline: none !important` above left the experience tabs with
+   no keyboard focus indicator at all. Restore one for keyboard users only
+   (MUI adds .Mui-focusVisible alongside the native :focus-visible). The inset
+   offset keeps the ring inside the tab so it cannot overlap its neighbour. */
+.MuiButtonBase-root:focus-visible,
+.MuiButtonBase-root.Mui-focusVisible {
+  outline: 2px solid var(--green-bright) !important;
+  outline-offset: -2px;
+}
+
 .PrivateTabIndicator-colorSecondary-5 {
   background-color: var(--green-bright) !important;
 }

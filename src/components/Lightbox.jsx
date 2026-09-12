@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
@@ -16,6 +16,19 @@ import "../styles/Lightbox.css";
 const Lightbox = ({ photos, index, onClose, onIndex }) => {
   const photo = photos[index];
   const hasMultiple = photos.length > 1;
+  const closeRef = useRef(null);
+
+  // Dialog focus management: move focus into the overlay on open and restore
+  // it to the trigger (the photography card) when the overlay closes.
+  useEffect(() => {
+    const previouslyFocused = document.activeElement;
+    if (closeRef.current) closeRef.current.focus({ preventScroll: true });
+    return () => {
+      if (previouslyFocused && typeof previouslyFocused.focus === "function") {
+        previouslyFocused.focus({ preventScroll: true });
+      }
+    };
+  }, []);
 
   const goTo = (direction) => {
     const next = (index + direction + photos.length) % photos.length;
@@ -51,6 +64,7 @@ const Lightbox = ({ photos, index, onClose, onIndex }) => {
       <button
         className="lightbox-close"
         type="button"
+        ref={closeRef}
         onClick={onClose}
         aria-label="Close photo viewer"
       >

@@ -19,7 +19,11 @@ const CertificateViewer = () => {
     return (
       <div className="cert-page">
         <div className="section-header">
-          <Link to="/#projects" className="back-button">
+          <Link
+            to="/#projects"
+            className="back-button"
+            aria-label="Back to certifications"
+          >
             <ArrowBackRoundedIcon />
           </Link>
           <h1 className="section-title">/ certificate not found</h1>
@@ -41,7 +45,11 @@ const CertificateViewer = () => {
   return (
     <div className="cert-page">
       <div className="section-header">
-        <Link to="/#projects" className="back-button">
+        <Link
+          to="/#projects"
+          className="back-button"
+          aria-label="Back to certifications"
+        >
           <ArrowBackRoundedIcon />
         </Link>
         <p className="section-title">/ {cert.title.toLowerCase()}</p>

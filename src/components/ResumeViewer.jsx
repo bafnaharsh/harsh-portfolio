@@ -18,7 +18,7 @@ const RESUME_FILE = portfolio.links.resume;
 const ResumeViewer = () => (
   <div className="cert-page">
     <div className="section-header">
-      <Link to="/" className="back-button">
+      <Link to="/" className="back-button" aria-label="Back to home">
         <ArrowBackRoundedIcon />
       </Link>
       <p className="section-title">/ resume</p>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
@@ -19,6 +19,20 @@ import "../styles/PdfViewerModal.css";
 //              the shareable deep link. Omit for non-shareable docs (resume).
 const PdfViewerModal = ({ title, src, onClose, shareUrl }) => {
   const [copied, setCopied] = useState(false);
+  const closeRef = useRef(null);
+
+  // Dialog focus management: move focus into the dialog on open and hand it
+  // back to whatever was focused before when the dialog goes away.
+  // preventScroll keeps the underlying page exactly where it was.
+  useEffect(() => {
+    const previouslyFocused = document.activeElement;
+    if (closeRef.current) closeRef.current.focus({ preventScroll: true });
+    return () => {
+      if (previouslyFocused && typeof previouslyFocused.focus === "function") {
+        previouslyFocused.focus({ preventScroll: true });
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const handleKey = (event) => {
@@ -73,6 +87,7 @@ const PdfViewerModal = ({ title, src, onClose, shareUrl }) => {
           <button
             className="pdf-viewer-close"
             type="button"
+            ref={closeRef}
             onClick={onClose}
             aria-label={`Close ${title} viewer`}
           >

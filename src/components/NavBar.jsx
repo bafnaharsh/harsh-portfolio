@@ -51,13 +51,25 @@ const NavBar = () => {
             <Nav.Link href="/#photography">Photography</Nav.Link>
           </Nav>
           <Nav className="ms-auto" onSelect={() => setExpanded(false)}>
-            <Nav.Link href={links.email}>
+            {/* Icon-only links: the MUI icons are aria-hidden, so each link
+                needs an explicit accessible name for screen readers. */}
+            <Nav.Link href={links.email} aria-label={`Email ${profile.name}`}>
               <EmailRoundedIcon style={{ fontSize: 20 }} />
             </Nav.Link>
-            <Nav.Link href={links.github} target="_blank">
+            <Nav.Link
+              href={links.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub profile (opens in new tab)"
+            >
               <GitHubIcon style={{ fontSize: 19 }} />
             </Nav.Link>
-            <Nav.Link href={links.linkedin} target="_blank">
+            <Nav.Link
+              href={links.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn profile (opens in new tab)"
+            >
               <LinkedInIcon style={{ fontSize: 21 }} />
             </Nav.Link>
           </Nav>

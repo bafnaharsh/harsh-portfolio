@@ -48,6 +48,35 @@ a:hover {
   color: var(--lightest-slate);
 }
 
+/* ------------------------------------------------------------------ */
+/* Keyboard focus visibility (WCAG 2.4.7).                             */
+/* :focus-visible only, so pointer users never see a ring. Components   */
+/* that define their own (higher-specificity) focus-visible treatment   */
+/* keep it; this is the baseline for everything else. outline never     */
+/* participates in layout, so nothing reflows.                          */
+/* ------------------------------------------------------------------ */
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible,
+[role="button"]:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+.nav-link:focus-visible,
+.navbar-brand:focus-visible,
+.navbar-toggler:focus-visible {
+  outline: 2px solid var(--green-bright);
+  outline-offset: 3px;
+}
+
+/* NavBar.css suppresses the toggler ring entirely (`outline: none
+   !important` on :focus). Win on specificity so keyboard users still get
+   a ring, while pointer users keep the clean, shadow-free button. */
+.navbar .navbar-toggler:focus-visible {
+  outline: 2px solid var(--green-bright) !important;
+  outline-offset: 2px;
+}
+
 #content {
   width: 100%;
 }

@@ -38,9 +38,12 @@
   border-radius: 18px;
 }
 
-/* Subtle focus ring for keyboard users, without a boxy outline. */
-.projects-carousel-shell:focus-visible {
+/* Subtle focus ring for keyboard users, without a boxy outline. Specificity is
+   raised past the global `[tabindex]:focus-visible` baseline in App.css so the
+   shell keeps this single soft ring instead of showing two stacked rings. */
+.project-container .projects-carousel-shell:focus-visible {
   box-shadow: 0 0 0 2px var(--green-tint), 0 0 0 3px var(--green-bright);
+  outline: none;
 }
 
 /* The clipping window. overflow-x: hidden prevents cards from  */

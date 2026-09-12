@@ -95,6 +95,14 @@
   outline: none;
 }
 
+/* The rule above styles hover and focus identically, so on its own a keyboard
+   user cannot tell focus from a stray hover. Re-add a real ring for keyboard
+   focus only (hover keeps the outline-free look). */
+.cert-pill:focus-visible {
+  outline: 2px solid var(--green-bright);
+  outline-offset: 3px;
+}
+
 .cert-pill:hover .cert-pill-icon,
 .cert-pill:focus-visible .cert-pill-icon {
   transform: scale(1.1);

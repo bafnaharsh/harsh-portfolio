@@ -43,7 +43,11 @@ export default defineConfig({
           if (/[\\/]node_modules[\\/](react-bootstrap|bootstrap|@restart)[\\/]/.test(id)) {
             return 'bootstrap';
           }
-          return 'vendor';
+          // Everything else (react-markdown and its parser chain, small
+          // utilities) is left to the bundler so lazily-imported features
+          // keep their dependencies in their own lazy chunk instead of
+          // inflating the initial page load.
+          return undefined;
         },
       },
     },

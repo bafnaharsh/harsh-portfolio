@@ -1,0 +1,107 @@
+/* Human / Agent pill — fixed, bottom-centre, above safe-area inset. */
+.view-toggle {
+  position: fixed;
+  left: 50%;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  z-index: 1035; /* below the PDF/lightbox overlays (2000), beside back-to-top (1040) */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+}
+
+.view-toggle--hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateX(-50%) translateY(8px);
+}
+
+.view-toggle-group {
+  position: relative;
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 3px;
+  border-radius: 999px;
+  border: 1px solid rgba(136, 146, 176, 0.35);
+  background: rgba(10, 25, 47, 0.82);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 6px 20px rgba(2, 12, 27, 0.45);
+}
+
+.view-toggle-indicator {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 3px;
+  width: calc(50% - 3px);
+  border-radius: 999px;
+  background: rgba(100, 255, 218, 0.1);
+  border: 1px solid rgba(100, 255, 218, 0.45);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.view-toggle[data-view="agent"] .view-toggle-indicator {
+  transform: translateX(100%);
+}
+
+.view-toggle-option {
+  position: relative;
+  z-index: 1;
+  min-width: 82px;
+  min-height: 34px;
+  padding: 6px 16px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--slate);
+  font-family: "NTR", sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.9px;
+  text-transform: uppercase;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.view-toggle-option:hover {
+  color: var(--lightest-slate);
+}
+
+.view-toggle-option--active {
+  color: var(--green-bright);
+}
+
+.view-toggle-option:focus-visible {
+  outline: 2px solid var(--green-bright);
+  outline-offset: 2px;
+}
+
+/* Screen-reader-only announcement */
+.view-toggle-live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .view-toggle-option {
+    min-width: 72px;
+    padding: 6px 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .view-toggle,
+  .view-toggle-indicator,
+  .view-toggle-option {
+    transition: none;
+  }
+}

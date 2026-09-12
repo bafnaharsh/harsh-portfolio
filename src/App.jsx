@@ -11,6 +11,8 @@ import RobotGame from "./components/RobotGame";
 import ErrorBoundary from "./components/ErrorBoundary";
 import ScrollProgress from "./components/ScrollProgress";
 import BackToTop from "./components/BackToTop";
+import ViewModeToggle from "./components/ViewModeToggle";
+import { useViewMode } from "./hooks/useViewMode";
 import { Routes, Route, useLocation } from "react-router-dom";
 import "./App.css";
 import "./styles/Global.css";
@@ -22,6 +24,8 @@ const PhotographyGallery = lazy(() => import("./components/PhotographyGallery"))
 const CertificateViewer = lazy(() => import("./components/CertificateViewer"));
 const ResumeViewer = lazy(() => import("./components/ResumeViewer"));
 const NotFound = lazy(() => import("./components/NotFound"));
+// Agent (markdown) view — only loaded when ?view=agent is present.
+const AgentView = lazy(() => import("./components/AgentView"));
 
 // Route paths that actually render content (as opposed to falling through to
 // the catch-all 404). Used to decide whether the navbar/game chrome, which
@@ -38,6 +42,14 @@ function App() {
   const [gameActive, setGameActive] = useState(false);
   const [showGameInfo, setShowGameInfo] = useState(false);
   const knownRoute = isKnownRoute(pathname);
+  const { view, setView, isAgent } = useViewMode();
+  // Game mode is a human-view feature; switching to the agent view turns it
+  // off, and coming back never resumes it.
+  const showGame = knownRoute && !isAgent;
+  const changeView = (next) => {
+    if (next === "agent") setGameActive(false);
+    setView(next);
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -47,7 +59,7 @@ function App() {
     <div className="App">
       {knownRoute && <ScrollProgress />}
       {knownRoute && <NavBar />}
-      {knownRoute && (
+      {showGame && (
         <div className="game-toggle-fixed">
           <div className="game-toggle-row">
             <button
@@ -88,10 +100,13 @@ function App() {
           )}
         </div>
       )}
-      {knownRoute && <RobotGame active={gameActive} />}
+      {knownRoute && <RobotGame active={gameActive && showGame} />}
       <div id="content">
         <ErrorBoundary>
           <Suspense fallback={null}>
+            {isAgent && knownRoute ? (
+              <AgentView pathname={pathname} />
+            ) : (
             <Routes>
               <Route
                 path="/"
@@ -113,10 +128,12 @@ function App() {
               <Route path="/resume" element={<ResumeViewer />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
+            )}
           </Suspense>
         </ErrorBoundary>
       </div>
       {knownRoute && <BackToTop />}
+      {knownRoute && <ViewModeToggle view={view} onChange={changeView} hidden={gameActive} />}
     </div>
   );
 }

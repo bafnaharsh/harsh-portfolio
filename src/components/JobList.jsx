@@ -86,6 +86,11 @@ const JobList = () => {
         scrollButtons="auto"
         value={value}
         onChange={handleChange}
+        // `joblist-tabs` + `data-layout` let Experience.css style the selected
+        // company off the *same* breakpoint MUI uses (useMediaQuery md), rather
+        // than a CSS media query that could disagree between 800px and 900px.
+        className="joblist-tabs"
+        data-layout={isMobile ? "mobile" : "desktop"}
         sx={{
           borderRight: isMobile ? 0 : 1,
           borderBottom: isMobile ? 1 : 0,
@@ -116,9 +121,12 @@ const JobList = () => {
               "&.Mui-selected": {
                 color: "var(--green-bright)",
               },
+              // Hover is deliberately a weaker wash than the selected block
+              // (--green-tint, applied in Experience.css) so the two never
+              // read as the same state.
               "&:hover": {
                 color: "var(--green-bright)",
-                backgroundColor: "var(--green-tint)",
+                backgroundColor: "rgba(100, 255, 218, 0.05)",
               },
             }}
           />

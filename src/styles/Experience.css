@@ -11,11 +11,38 @@
   color: var(--lightest-slate);
 }
 
+/* The company of the panel currently on screen. The accent is painted as a
+   background gradient rather than a pseudo-element or a border so it adds no
+   box of its own: the span's border box (which game mode uses as a platform,
+   and which layout-snapshot measures) is byte-for-byte what it was before.
+   TabPanel only mounts the active panel, so this span is freshly created on
+   every tab change and the keyframe replays each time the panel changes. */
 .joblist-job-company {
   font-family: "NTR", sans-serif;
   font-size: 28px;
   color: var(--green-bright);
   font-weight: bold;
+  background-image: linear-gradient(var(--green-bright), var(--green-bright));
+  background-repeat: no-repeat;
+  /* NTR's inline content box runs ~0.86em below the baseline, so a plain
+     `100%` would drop the rule far under the text. Sit it just clear of the
+     descenders instead. Painting only — the span's box is untouched. */
+  background-position: 0 calc(100% - 0.58em);
+  background-size: 100% 2px;
+  /* When the header line wraps (narrow viewports), give every line fragment
+     its own underline instead of one box sliced across the break. */
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  animation: joblist-company-underline 260ms ease-out both;
+}
+
+@keyframes joblist-company-underline {
+  from {
+    background-size: 0 2px;
+  }
+  to {
+    background-size: 100% 2px;
+  }
 }
 
 .joblist-duration-row {
@@ -79,9 +106,11 @@
    no keyboard focus indicator at all. Restore one for keyboard users only
    (MUI adds .Mui-focusVisible alongside the native :focus-visible). The inset
    offset keeps the ring inside the tab so it cannot overlap its neighbour. */
-.MuiButtonBase-root:focus-visible,
-.MuiButtonBase-root.Mui-focusVisible {
+.joblist-tabs .MuiButtonBase-root:focus-visible,
+.joblist-tabs .MuiButtonBase-root.Mui-focusVisible {
   outline: 2px solid var(--green-bright) !important;
+  /* Higher specificity than the global `[tabindex]:focus-visible` rule in
+     App.css so the inset offset wins and the ring stays inside the tab. */
   outline-offset: -2px;
 }
 
@@ -99,6 +128,66 @@
 }
 .MuiButtonBase-root:focus {
   color: var(--green-bright) !important;
+}
+
+/* ─── Selected company in the experience tab rail ───────────────────────────
+   The selected tab was previously only a colour change plus MUI's 2px hairline
+   indicator, which is easy to miss. It now reads as a block: a --green-tint
+   wash, a 3px --green-bright accent bar (MUI's own indicator, re-sized and
+   moved to the left edge on desktop / kept at the bottom edge on mobile so it
+   still slides between tabs), and a slightly bolder label.
+
+   `[data-layout]` comes from JobList.jsx and tracks MUI's `useMediaQuery(md)`
+   exactly, so the rail's CSS can never disagree with its JS orientation.
+   Nothing here changes box metrics, and the .Mui-focusVisible outline rule
+   above still paints on top (outline is drawn outside the background). */
+.joblist-tabs .MuiTabs-indicator {
+  background-color: var(--green-bright);
+  border-radius: 2px;
+  transition: top 250ms ease, left 250ms ease, height 250ms ease, width 250ms ease;
+}
+
+.joblist-tabs[data-layout="desktop"] .MuiTabs-indicator {
+  width: 3px;
+  left: 0;
+  right: auto;
+}
+
+.joblist-tabs[data-layout="mobile"] .MuiTabs-indicator {
+  height: 3px;
+  bottom: 0;
+}
+
+#experience .joblist-tabs .MuiTab-root {
+  transition: background-color 250ms ease, color 250ms ease, font-weight 250ms ease;
+}
+
+/* Outranks the blanket `.MuiButtonBase-root { color: … !important }` above. */
+#experience .joblist-tabs .MuiTab-root.Mui-selected {
+  color: var(--green-bright) !important;
+  background-color: var(--green-tint);
+  font-weight: 600;
+}
+
+#experience .joblist-tabs[data-layout="desktop"] .MuiTab-root.Mui-selected {
+  border-radius: 0 4px 4px 0;
+}
+
+#experience .joblist-tabs[data-layout="mobile"] .MuiTab-root.Mui-selected {
+  border-radius: 4px 4px 0 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #experience .joblist-tabs .MuiTab-root,
+  .joblist-tabs .MuiTabs-indicator {
+    transition: none !important;
+  }
+
+  /* `both` fill would otherwise leave the underline mid-sweep; killing the
+     animation keeps the resting 100% background-size from the base rule. */
+  .joblist-job-company {
+    animation: none !important;
+  }
 }
 
 ul {

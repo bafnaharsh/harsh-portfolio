@@ -18,8 +18,19 @@ export const portfolio = {
     // Intro.jsx `.intro-desc`
     summary:
       "Machine learning engineer specializing in generative AI, multi-agent systems, and production-grade LLM applications. I build retrieval and analytics systems that turn messy enterprise data into useful answers.",
-    // Not stated anywhere on the site — intentionally empty (see §2.3).
-    location: "",
+    // public/HarshBafna.pdf — Experience block ("Bengaluru, IN")
+    location: "Bengaluru, India",
+    // public/HarshBafna.pdf — Professional Summary
+    resumeSummary:
+      "Machine Learning Engineer with ~3 years of experience specializing in Generative AI, multi-agent orchestration, MLOps, and enterprise cloud architecture on GCP. Proven track record of architecting scalable retrieval systems (RAG), and deploying microservices-backed production AI platforms for enterprise data analytics.",
+    // index.html JSON-LD `knowsAbout`
+    knowsAbout: [
+      "Machine Learning",
+      "Generative AI",
+      "Large Language Models",
+      "Retrieval-Augmented Generation",
+      "Multi-Agent Systems",
+    ],
     email: "Harshbafna26@gmail.com",
     avatar: "/profile.webp",
     avatarAlt: "Harsh Bafna",
@@ -78,8 +89,8 @@ export const portfolio = {
       role: "Machine Learning Engineer",
       start: "FEB 2024",
       end: "PRESENT",
-      // Not shown per job on the site — empty on purpose.
-      location: "",
+      // public/HarshBafna.pdf
+      location: "Bengaluru, India",
       bullets: [
         "Led 5+ ML engineers in a 24+ member team to ship production multi-agent systems for natural-language enterprise analytics.",
         "Architected ADK-based agents with RAG over 14+ structured data sources, including Kafka topics, Google Ads, and Google Analytics schemas.",
@@ -94,7 +105,8 @@ export const portfolio = {
       role: "Software Engineer Intern",
       start: "NOV 2022",
       end: "SEP 2023",
-      location: "",
+      // public/HarshBafna.pdf
+      location: "Remote",
       bullets: [
         "Designed a real-time data streaming interface capable of processing 100,000+ data points per second.",
         "Used JP Morgan Chase's Perspective visualization tool to build live financial correlation graphs.",
@@ -117,6 +129,13 @@ export const portfolio = {
         "Production multi-agent analytics platform that lets business users query structured enterprise data through natural-language chat.",
       stack: ["Python", "SQL", "Google ADK", "LLMs", "RAG", "AI Agents"],
       links: {},
+      // public/HarshBafna.pdf — project block under Quantiphi
+      resumeTags: ["AI Agents", "ADK", "BigQuery", "Apache Kafka", "RAG", "Multi Agent Orchestration"],
+      details: [
+        "Led a team of 5+ ML engineers within a 24+ member engineering group to design and ship 3 production-grade multi-agent orchestration systems, enabling executive teams to query enterprise metrics via natural language.",
+        "Architected an agentic analytics platform utilizing Google Agent Development Kit (ADK) with a custom RAG retrieval engine indexing schemas across 14+ structured data sources (Kafka topics, Google Ads, BigQuery) for precise NL2SQL synthesis.",
+        "Cut executive and management data-reporting turnaround time from days to under 2 minutes, accelerating decision-making velocity across business units.",
+      ],
     },
     {
       slug: "ai-search-recommendation-engine",
@@ -126,6 +145,12 @@ export const portfolio = {
         "Conversational product discovery system over an 80K+ SKU catalog, combining Vertex AI Search with recommendation models.",
       stack: ["Python", "Vertex AI Search", "LLMs", "Ranking"],
       links: {},
+      resumeTags: ["Vertex AI Search", "Dynamic Model Swap", "Ranking", "Keyword Extraction"],
+      details: [
+        "Architected a real-time conversational search and recommendation engine, replacing legacy fuzzy keyword matching with intent-aware semantic vector retrieval.",
+        "Engineered a high-throughput search platform using Vertex AI Search for Commerce, indexing a 1.5M+ SKU product catalog and implementing custom ranking models (frequently-bought-together, similar items, personalized scoring).",
+        "Increased catalog discovery accuracy and user engagement by aligning free-form natural language queries directly to product vector spaces.",
+      ],
     },
     {
       slug: "ai-email-campaign-generator",
@@ -135,6 +160,12 @@ export const portfolio = {
         "AI workflow that scrapes property themes and metadata, then generates polished marketing emails with enhanced imagery.",
       stack: ["Python", "LLMs", "Web Scraping", "NLP", "Imagen"],
       links: {},
+      resumeTags: ["Agentic Workflows", "Imagen", "Cloud Run", "Web Scraping"],
+      details: [
+        "Built an automated multimodal marketing workflow that extracts brand aesthetics and metadata from target web domains to generate custom email assets.",
+        "Engineered headless scraping pipelines (Playwright) to extract design assets, feeding structured contextual prompts into Gemini and Imagen models deployed on Cloud Run for dynamic asset generation.",
+        "Reduced marketing campaign creation cycles from weeks to under 5 minutes by completely automating asset extraction and copy generation.",
+      ],
     },
     {
       slug: "lead-hotspot-detection",
@@ -144,6 +175,12 @@ export const portfolio = {
         "Hybrid ML and rules-based system for predicting lead-contamination hotspots from SDWIS public water system data.",
       stack: ["Python", "LangChain", "LLMs", "EDA", "Feature Engineering"],
       links: {},
+      resumeTags: ["Hybrid Predictive Model", "SDWIS Database", "Geospatial Feature Engineering"],
+      details: [
+        "Engineered machine learning pipelines to predict municipal lead contamination risks across regional drinking water systems.",
+        "Preprocessed and engineered spatial features from Public Water System (PWS) datasets sourced from the EPA SDWIS database, implementing hybrid XGBoost and heuristic rule-based decision trees.",
+        "Achieved 88+% predictive accuracy for lead hotspot identification, directly optimizing resource allocation for infrastructure remediation teams.",
+      ],
     },
     {
       slug: "real-time-market-visualization",
@@ -153,22 +190,55 @@ export const portfolio = {
         "Streaming interface and live graphing workflow for monitoring historical stock-correlation behavior at high throughput.",
       stack: ["Perspective", "Real-Time Data Streaming", "Visualization"],
       links: {},
+      resumeTags: [],
+      details: [
+        "Engineered a real-time financial streaming interface capable of ingesting and processing over 100,000 data points/second with minimal latency.",
+        "Utilized JP Morgan's Perspective open-source data engine to construct dynamic visualization dashboards monitoring historical stock pair correlations.",
+        "Implemented automated bound-crossing alert triggers based on statistical correlation metrics to support real-time quantitative monitoring.",
+      ],
     },
   ],
 
+  // public/HarshBafna.pdf — Technical Skills, verbatim groups
   skills: [
-    // About.jsx tech list
-    { group: "Technologies", items: ["Python", "SQL", "LangChain", "Google ADK", "Vertex AI", "FastAPI"] },
-    // index.html JSON-LD `knowsAbout`
     {
-      group: "Areas",
+      group: "Programming & Core CS",
+      items: ["Python", "C/C++", "Java", "SQL", "Bash / Shell Scripting", "Object-Oriented Programming (OOP)"],
+    },
+    {
+      group: "Generative AI & Agentic Systems",
       items: [
-        "Machine Learning",
-        "Generative AI",
-        "Large Language Models",
-        "Retrieval-Augmented Generation",
-        "Multi-Agent Systems",
+        "Google Agent Development Kit (ADK)", "LLMs", "Multi-Agent Orchestration", "Retrieval-Augmented Generation (RAG)",
+        "Model Context Protocol (MCP)", "LangChain", "LangGraph", "Prompt Engineering", "Vector Search", "Hybrid Search",
+        "Embeddings", "Fine-Tuning", "PEFT/LoRA", "AI Guardrails", "Nvidia NeMo",
       ],
+    },
+    {
+      group: "Machine Learning & Data Science",
+      items: [
+        "Neural Networks", "PyTorch", "TensorFlow", "Scikit-Learn", "XGBoost", "LightGBM", "Pandas", "NumPy", "OpenCV",
+        "Natural Language Processing (NLP)", "Computer Vision", "Feature Engineering", "Exploratory Data Analysis (EDA)",
+        "Time-Series Forecasting",
+      ],
+    },
+    {
+      group: "GCP, Cloud & Infrastructure",
+      items: [
+        "Google Cloud Platform (GCP)", "Vertex AI", "Search/Recommendation Models", "Cloud Run/AWS Lambda", "Cloud Functions",
+        "Google Cloud Storage (GCS)", "Firebase", "Pub/Sub", "AWS", "Azure", "Docker", "Kubernetes", "DevOps", "Linux",
+      ],
+    },
+    {
+      group: "Data Engineering & Architecture",
+      items: [
+        "BigQuery", "Data Warehousing", "Apache Kafka", "Snowflake", "PostgreSQL", "MongoDB", "MySQL", "Redis", "NoSQL",
+        "Vector Databases", "Data Pipelines", "Microservices", "REST APIs", "FastAPI", "Backend Architecture",
+        "Full-Stack Integration", "System Design",
+      ],
+    },
+    {
+      group: "MLOps, Web & Tools",
+      items: ["CI/CD", "MLflow", "Hugging Face", "Model Deployment", "Streamlit", "Git", "GitHub", "Document AI", "Agile Methodologies"],
     },
   ],
 

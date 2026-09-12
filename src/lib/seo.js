@@ -64,7 +64,8 @@ export function personJsonLd() {
     description: profile.summary,
     worksFor: { "@type": "Organization", name: meta.worksFor, url: links.quantiphi },
     email: `mailto:${profile.email}`,
-    knowsAbout: portfolio.skills.find((g) => g.group === "Areas")?.items ?? [],
+    knowsAbout: profile.knowsAbout,
+    ...(profile.location ? { homeLocation: { "@type": "Place", name: profile.location } } : {}),
     alumniOf: portfolio.education.map((e) => ({
       "@type": "EducationalOrganization",
       name: e.institution,

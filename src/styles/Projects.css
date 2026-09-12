@@ -183,6 +183,7 @@
 }
 
 .projects-carousel-dot {
+  position: relative; /* anchors the enlarged hit area below; no layout change */
   width: 8px;
   height: 8px;
   padding: 0;
@@ -192,6 +193,14 @@
   cursor: pointer;
   transition: width 0.3s cubic-bezier(0.45, 0, 0.15, 1),
     background-color 0.3s ease;
+}
+
+/* 8px dots are hard to hit; extend the clickable area to ~44px tall without
+   drawing anything or changing the row's layout. */
+.projects-carousel-dot::after {
+  content: "";
+  position: absolute;
+  inset: -18px -6px;
 }
 
 .projects-carousel-dot:hover {

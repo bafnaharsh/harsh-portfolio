@@ -16,11 +16,20 @@
 }
 
 .back-button {
+  position: relative; /* anchors the enlarged hit area below; no layout change */
   color: var(--green-bright);
   text-decoration: none;
   margin-right: 20px;
   margin-top: 15px;
   transition: transform 0.2s ease;
+}
+
+/* The icon is 24px; extend the clickable/tappable area to ≥44px without
+   changing what is drawn or how the header is laid out. */
+.back-button::after {
+  content: "";
+  position: absolute;
+  inset: -10px;
 }
 
 .back-button:hover {

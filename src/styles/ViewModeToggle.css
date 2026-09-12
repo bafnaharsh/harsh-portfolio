@@ -52,7 +52,7 @@
   position: relative;
   z-index: 1;
   min-width: 82px;
-  min-height: 34px;
+  min-height: 38px; /* + 3px group padding top/bottom = 44px tap target */
   padding: 6px 16px;
   border: 0;
   border-radius: 999px;

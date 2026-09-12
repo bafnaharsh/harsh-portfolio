@@ -23,7 +23,7 @@ const abs = (siteUrl, path) => (path.startsWith("http") ? path : `${siteUrl}${pa
 
 /** Full profile document — the / route in agent mode and dist/_md/index.md. */
 export function renderProfileMarkdown(p, { siteUrl = "" } = {}) {
-  const { profile, about, links, experience, projects, skills, education, certifications } = p;
+  const { profile, about, experience, projects, skills, education, certifications } = p;
   const lines = [];
 
   lines.push(`# ${profile.name}`, "");

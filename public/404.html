@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#0a192f" />
+    <title>Page not found — Harsh Bafna</title>
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=NTR&display=swap" />
+    <style>
+      :root {
+        --navy: #0a192f;
+        --lightest-navy: #233554;
+        --slate: #8892b0;
+        --lightest-slate: #ccd6f6;
+        --green-bright: #64ffda;
+        --green-tint: rgba(100, 255, 218, 0.1);
+      }
+      html, body { margin: 0; min-height: 100%; }
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 24px;
+        box-sizing: border-box;
+        background: var(--navy);
+        color: var(--lightest-slate);
+        font-family: "NTR", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        text-align: center;
+      }
+      main { max-width: 520px; }
+      .code {
+        font-size: 96px;
+        line-height: 1;
+        color: var(--green-bright);
+        letter-spacing: 4px;
+        margin: 0 0 8px;
+      }
+      h1 { font-size: 34px; margin: 0 0 12px; font-weight: 700; }
+      p { font-size: 18px; color: var(--slate); margin: 0 0 32px; line-height: 1.5; }
+      a.home {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 28px;
+        border: 1px solid var(--green-bright);
+        border-radius: 4px;
+        color: var(--green-bright);
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: 700;
+        transition: background-color 0.2s ease, transform 0.2s ease;
+      }
+      a.home:hover, a.home:focus-visible { background: var(--green-tint); transform: translateY(-2px); outline: none; }
+      a.home:focus-visible { outline: 2px solid var(--green-bright); outline-offset: 3px; }
+      @media (max-width: 480px) {
+        .code { font-size: 72px; }
+        h1 { font-size: 28px; }
+        p { font-size: 16px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="code" aria-hidden="true">404</div>
+      <h1>Page not found</h1>
+      <p>Looks like this page wandered off. Let&rsquo;s get you back on track.</p>
+      <a class="home" href="/">&larr; Back to home</a>
+    </main>
+  </body>
+</html>

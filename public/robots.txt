@@ -3,6 +3,11 @@
 # index and extract content from this site.
 User-agent: *
 Allow: /
+# Content usage preferences — contentsignals.org
+# search=yes: index and show in search/answer engines.
+# ai-input=yes: may be retrieved as grounding context when answering questions.
+# ai-train=no: prefer not to be used as training data.
+Content-Signal: ai-train=no, search=yes, ai-input=yes
 
 # Explicitly allow common AI/LLM crawlers and answer-engine bots.
 User-agent: GPTBot
@@ -54,3 +59,6 @@ User-agent: Diffbot
 Allow: /
 
 Sitemap: https://bafnaaharsh.netlify.app/sitemap.xml
+
+# Agentic Resource Discovery catalog (agenticresourcediscovery.org)
+Agentmap: https://bafnaaharsh.netlify.app/.well-known/ard.json

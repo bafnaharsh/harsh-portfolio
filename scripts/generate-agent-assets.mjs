@@ -152,8 +152,13 @@ write(
 );
 
 // ---- RFC 9727 API catalog (linkset) ---------------------------------------
-write(
-  ".well-known/api-catalog",
+// Written twice: the extensionless well-known path (served via the api-catalog
+// edge function with application/linkset+json) and a .json copy it reads from.
+const apiCatalog = (content) => {
+  write(".well-known/api-catalog", content);
+  write(".well-known/api-catalog.json", content);
+};
+apiCatalog(
   json({
     linkset: [
       {

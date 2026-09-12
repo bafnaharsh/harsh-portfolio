@@ -70,11 +70,13 @@ for (const [route, ok] of ROUTES) {
   }
 }
 
-// ---------- 404 must be a real 404 (only meaningful once _redirects has the fallback) ----------
+// ---------- Unknown paths must be a real HTTP 404 (static 404.html) ----------
 {
   const { ctx, page } = await open(1280, 800);
-  const resp = await page.goto(BASE + "/this-path-does-not-exist", { waitUntil: "load" });
-  check("nonexistent path status", resp.status() === 404 || resp.status() === 200, `HTTP ${resp.status()} (404 expected after Phase 5)`);
+  for (const p of ["/this-path-does-not-exist", "/.well-known/openid-configuration", "/certificate/bogus-slug"]) {
+    const resp = await page.goto(BASE + p, { waitUntil: "load" });
+    check(`real 404 for ${p}`, resp.status() === 404 && (await page.title()).startsWith("Page not found"), `HTTP ${resp.status()}`);
+  }
   await ctx.close();
 }
 

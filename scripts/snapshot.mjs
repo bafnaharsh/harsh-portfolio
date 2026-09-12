@@ -17,7 +17,8 @@ for (const route of ROUTES) {
     await page.goto(BASE + route, { waitUntil: "networkidle" });
     await page.waitForTimeout(2500); // let TypeAnimation finish
     const snap = await page.evaluate(() => {
-      const root = document.querySelector("#content").cloneNode(true);
+      // Static 404.html has no #content; snapshot the body instead.
+      const root = (document.querySelector("#content") || document.body).cloneNode(true);
       root.querySelectorAll("canvas").forEach((c) => c.replaceWith(document.createElement("canvas")));
       // Strip per-render noise: transition delays, inline transform styles, MUI ids
       root.querySelectorAll("[style]").forEach((e) => e.removeAttribute("style"));

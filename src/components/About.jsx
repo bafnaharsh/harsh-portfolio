@@ -46,7 +46,14 @@ const About = () => {
             <Paragraph segments={two} />
           </div>
           <div className="about-image">
-            <img alt={profile.aboutImageAlt} src={profile.aboutImage} />
+            <img
+              alt={profile.aboutImageAlt}
+              src={profile.aboutImage}
+              width={profile.aboutImageWidth}
+              height={profile.aboutImageHeight}
+              loading="lazy"
+              decoding="async"
+            />
           </div>
         </div>
       </FadeInSection>

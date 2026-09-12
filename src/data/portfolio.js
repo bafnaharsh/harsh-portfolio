@@ -24,6 +24,8 @@ export const portfolio = {
     avatar: "/profile.webp",
     avatarAlt: "Harsh Bafna",
     aboutImage: "/assets/about-harsh.webp",
+    aboutImageWidth: 600,
+    aboutImageHeight: 600,
     aboutImageAlt: "Harsh Bafna",
     // Intro.jsx greeting pieces
     greeting: { before: "hi, ", name: "harsh", after: " here." },
@@ -205,12 +207,12 @@ export const portfolio = {
     description:
       "A small collection of photos, gathered from travel, streets, and quiet everyday frames.",
     photos: [
-      { src: "/assets/photography/kediler.jpeg", title: "street cats" },
-      { src: "/assets/photography/IMG_20210428_183550.jpg", title: "evening frame" },
-      { src: "/assets/photography/IMG_20210420_100741_174.jpg", title: "open sky" },
-      { src: "/assets/photography/IMG_20210409_171430.jpg", title: "quiet corner" },
-      { src: "/assets/photography/IMG_20210329_082927_984.jpg", title: "morning light" },
-      { src: "/assets/photography/1000014681~3.jpg", title: "city texture" },
+      { src: "/assets/photography/kediler.webp", title: "street cats", width: 671, height: 1200 },
+      { src: "/assets/photography/IMG_20210428_183550.webp", title: "evening frame", width: 1197, height: 1600 },
+      { src: "/assets/photography/IMG_20210420_100741_174.webp", title: "open sky", width: 720, height: 1280 },
+      { src: "/assets/photography/IMG_20210409_171430.webp", title: "quiet corner", width: 907, height: 1600 },
+      { src: "/assets/photography/IMG_20210329_082927_984.webp", title: "morning light", width: 1280, height: 612 },
+      { src: "/assets/photography/1000014681~3.webp", title: "city texture", width: 1205, height: 1600 },
     ],
   },
 

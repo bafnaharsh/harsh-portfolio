@@ -45,6 +45,8 @@ const PhotographyGallery = () => {
                 src={photo.src}
                 alt={photo.title}
                 className="gallery-image"
+                width={photo.width}
+                height={photo.height}
                 loading="lazy"
                 decoding="async"
                 onError={() => setHiddenPhotos((current) => new Set(current).add(photo.src))}

@@ -1,10 +1,25 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { staticHeadHtml } from './src/lib/seo.js'
+
+// Injects the <head> metadata block (title, description, canonical, Open
+// Graph, Twitter, Person JSON-LD) into index.html from src/data/portfolio.js,
+// so the identity facts crawlers see without JavaScript come from the same
+// single source of truth as the rest of the site.
+const portfolioHead = () => ({
+  name: 'portfolio-head',
+  transformIndexHtml(html) {
+    if (!html.includes('<!--%PORTFOLIO_HEAD%-->')) {
+      throw new Error('index.html is missing the <!--%PORTFOLIO_HEAD%--> placeholder')
+    }
+    return html.replace('<!--%PORTFOLIO_HEAD%-->', staticHeadHtml())
+  },
+})
 
 // https://vite.dev/config/
 export default defineConfig({
   base: '/',
-  plugins: [react()],
+  plugins: [react(), portfolioHead()],
   server: {
     host: true,
     port: 5173

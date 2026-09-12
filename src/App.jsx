@@ -13,6 +13,7 @@ import ScrollProgress from "./components/ScrollProgress";
 import BackToTop from "./components/BackToTop";
 import ViewModeToggle from "./components/ViewModeToggle";
 import { useViewMode } from "./hooks/useViewMode";
+import { useRouteMeta } from "./hooks/useRouteMeta";
 import { Routes, Route, useLocation } from "react-router-dom";
 import "./App.css";
 import "./styles/Global.css";
@@ -50,6 +51,8 @@ function App() {
     if (next === "agent") setGameActive(false);
     setView(next);
   };
+
+  useRouteMeta(pathname);
 
   useEffect(() => {
     window.scrollTo(0, 0);

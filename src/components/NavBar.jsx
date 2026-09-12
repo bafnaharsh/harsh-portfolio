@@ -3,10 +3,15 @@ import { Container, Nav, Navbar } from "react-bootstrap";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import GitHubIcon from "@mui/icons-material/GitHub";
+import HoverPreview from "./HoverPreview";
 import "../styles/NavBar.css";
 import { portfolio } from "../data/portfolio";
 
 const { profile, links } = portfolio;
+
+// Display forms derived from the data — nothing here is hardcoded.
+const emailAddress = links.email.replace(/^mailto:/i, "");
+const prettyUrl = (url) => url.replace(/^https?:\/\//i, "").replace(/\/+$/, "");
 
 const NavBar = () => {
   const [expanded, setExpanded] = useState(false);
@@ -53,25 +58,41 @@ const NavBar = () => {
           <Nav className="ms-auto" onSelect={() => setExpanded(false)}>
             {/* Icon-only links: the MUI icons are aria-hidden, so each link
                 needs an explicit accessible name for screen readers. */}
-            <Nav.Link href={links.email} aria-label={`Email ${profile.name}`}>
-              <EmailRoundedIcon style={{ fontSize: 20 }} />
-            </Nav.Link>
-            <Nav.Link
-              href={links.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="GitHub profile (opens in new tab)"
+            <HoverPreview title="Email" detail={emailAddress} hint="opens your mail app" placement="bottom">
+              <Nav.Link href={links.email} aria-label={`Email ${profile.name}`}>
+                <EmailRoundedIcon style={{ fontSize: 20 }} />
+              </Nav.Link>
+            </HoverPreview>
+            <HoverPreview
+              title="GitHub"
+              detail={prettyUrl(links.github)}
+              hint="opens in a new tab"
+              placement="bottom"
             >
-              <GitHubIcon style={{ fontSize: 19 }} />
-            </Nav.Link>
-            <Nav.Link
-              href={links.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="LinkedIn profile (opens in new tab)"
+              <Nav.Link
+                href={links.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub profile (opens in new tab)"
+              >
+                <GitHubIcon style={{ fontSize: 19 }} />
+              </Nav.Link>
+            </HoverPreview>
+            <HoverPreview
+              title="LinkedIn"
+              detail={prettyUrl(links.linkedin)}
+              hint="opens in a new tab"
+              placement="bottom"
             >
-              <LinkedInIcon style={{ fontSize: 21 }} />
-            </Nav.Link>
+              <Nav.Link
+                href={links.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn profile (opens in new tab)"
+              >
+                <LinkedInIcon style={{ fontSize: 21 }} />
+              </Nav.Link>
+            </HoverPreview>
           </Nav>
         </Navbar.Collapse>
       </Container>

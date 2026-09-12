@@ -1,0 +1,108 @@
+/* Hover / focus preview card (portalled to <body>, never affects layout). */
+
+.hover-preview {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1900;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  box-sizing: border-box;
+  width: max-content;
+  max-width: 260px;
+  padding: 9px 12px;
+  border: 1px solid rgba(100, 255, 218, 0.25);
+  border-radius: 10px;
+  background: rgba(10, 25, 47, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px -15px rgba(2, 12, 27, 0.9);
+  font-family: "NTR", sans-serif;
+  font-weight: 400;
+  line-height: 1.35;
+  text-align: left;
+  /* Never intercept the pointer — the trigger stays fully clickable. */
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  --hp-from: -4px;
+}
+
+.hover-preview[data-side="top"] {
+  --hp-from: 4px;
+}
+
+.hover-preview[data-ready="true"] {
+  visibility: visible;
+  animation: hover-preview-in 180ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes hover-preview-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--hp-from));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.hover-preview-title {
+  color: var(--green-bright, #64ffda);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.hover-preview-detail {
+  color: var(--light-slate, #a8b2d1);
+  font-size: 13px;
+  word-break: break-word;
+}
+
+.hover-preview-hint,
+.hover-preview-note {
+  color: var(--slate, #8892b0);
+  font-size: 12px;
+  word-break: break-word;
+}
+
+.hover-preview-note {
+  margin-top: 2px;
+  opacity: 0.9;
+}
+
+/* Caret pointing back at the trigger. */
+.hover-preview::after {
+  content: "";
+  position: absolute;
+  left: var(--hp-caret, 50%);
+  width: 8px;
+  height: 8px;
+  margin-left: -4px;
+  background: rgba(10, 25, 47, 0.92);
+  border: 1px solid rgba(100, 255, 218, 0.25);
+  transform: rotate(45deg);
+}
+
+.hover-preview[data-side="bottom"]::after {
+  top: -5px;
+  border-right: 0;
+  border-bottom: 0;
+}
+
+.hover-preview[data-side="top"]::after {
+  bottom: -5px;
+  border-left: 0;
+  border-top: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hover-preview[data-ready="true"] {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}

@@ -6,9 +6,14 @@ import ArticleRoundedIcon from "@mui/icons-material/ArticleRounded";
 import FadeInSection from "./FadeInSection";
 import AsciiPortrait from "./AsciiPortrait";
 import PdfViewerModal from "./PdfViewerModal";
-import { portfolio } from "../data/portfolio";
+import HoverPreview from "./HoverPreview";
+import { portfolio, routes } from "../data/portfolio";
 
 const { profile, links } = portfolio;
+
+// Display forms derived from the data — nothing here is hardcoded.
+const emailAddress = links.email.replace(/^mailto:/i, "");
+const resumePath = routes().find((route) => route.path.endsWith("resume"))?.path ?? links.resume;
 
 const Intro = () => {
   const [showResume, setShowResume] = useState(false);
@@ -30,18 +35,27 @@ const Intro = () => {
         <FadeInSection>
           <div className="intro-desc">{profile.summary}</div>
           <div className="intro-actions">
-            <a href={links.email} className="intro-contact">
-              <EmailRoundedIcon />
-              {" Say hi!"}
-            </a>
-            <button
-              type="button"
-              className="intro-contact intro-contact--button"
-              onClick={() => setShowResume(true)}
+            <HoverPreview title="Email" detail={emailAddress} hint="opens your mail app" placement="top">
+              <a href={links.email} className="intro-contact">
+                <EmailRoundedIcon />
+                {" Say hi!"}
+              </a>
+            </HoverPreview>
+            <HoverPreview
+              title="Résumé"
+              detail="PDF · opens in a viewer here"
+              note={`shareable link: ${resumePath}`}
+              placement="top"
             >
-              <ArticleRoundedIcon />
-              Resume
-            </button>
+              <button
+                type="button"
+                className="intro-contact intro-contact--button"
+                onClick={() => setShowResume(true)}
+              >
+                <ArticleRoundedIcon />
+                Resume
+              </button>
+            </HoverPreview>
           </div>
         </FadeInSection>
         {showResume && (

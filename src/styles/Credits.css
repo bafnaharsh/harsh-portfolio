@@ -2,6 +2,9 @@
   display: flex;
   align-items: center;
   padding-top: 60px;
+  /* clearance for the fixed Human/Agent pill (50px tall, 16px above the
+     bottom edge) so the credits line is never covered at the scroll end */
+  padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
 }
 
 .ending-credits {
@@ -10,5 +13,5 @@
   text-align: center;
   width: 100%;
   font-size: 16px;
-  padding-bottom: 40px;
+  padding-bottom: 0;
 }

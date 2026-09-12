@@ -8,7 +8,8 @@
 .cert-page {
   margin: auto;
   max-width: 1000px;
-  padding: 100px 0 60px;
+  /* bottom: clearance for the fixed Human/Agent pill */
+  padding: 100px 0 calc(96px + env(safe-area-inset-bottom, 0px));
 }
 
 /* ---------- Homepage: cert pills ---------- */
@@ -262,7 +263,7 @@
 /* ---------- Responsive ---------- */
 @media only screen and (max-width: 768px) {
   .cert-page {
-    padding: 80px 0 40px;
+    padding: 80px 0 calc(96px + env(safe-area-inset-bottom, 0px));
   }
 
   .cert-page-head {

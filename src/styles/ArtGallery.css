@@ -1,5 +1,6 @@
 .art-gallery-page {
-  padding: 80px 20px;
+  /* bottom: clearance for the fixed Human/Agent pill */
+  padding: 80px 20px calc(96px + env(safe-area-inset-bottom, 0px));
   background-color: var(--navy);
   min-height: 100vh;
   max-width: 1000px;
@@ -93,7 +94,7 @@
 
 @media (max-width: 768px) {
   .art-gallery-page {
-    padding: 60px 20px;
+    padding: 60px 20px calc(96px + env(safe-area-inset-bottom, 0px));
   }
 }
 

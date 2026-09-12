@@ -71,7 +71,8 @@ const ViewModeToggle = ({ view, onChange, hidden = false }) => {
               onClick={() => select(i)}
               disabled={hidden}
             >
-              {option.label}
+              <span className="view-toggle-dot" aria-hidden="true" />
+              <span className="view-toggle-label">{option.label}</span>
             </button>
           );
         })}

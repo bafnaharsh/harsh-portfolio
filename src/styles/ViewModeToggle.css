@@ -3,8 +3,9 @@
    the green GAME MODE toggle at top-left. */
 .view-toggle {
   /* Clearance the scroll-ends of every route reserve for this pill:
-     pill height (50px) + bottom offset (16px) + 24px breathing room, rounded
-     up to 96px. Mirrored in Credits.css / Certificates.css / ArtGallery.css. */
+     pill height (34px) + bottom offset (16px) + breathing room = 96px.
+     Mirrored in Credits.css / Certificates.css / ArtGallery.css.
+     Height matches the GAME MODE toggle (32px) so the two read as a pair. */
   --view-toggle-purple: #bf9fd4; /* dot, border, glow — the game's purple */
   --view-toggle-purple-text: #d8c3ec; /* lighter tint so the label clears 4.5:1 */
   position: fixed;
@@ -29,7 +30,7 @@
   position: relative;
   display: inline-grid;
   grid-template-columns: 1fr 1fr;
-  padding: 4px;
+  padding: 3px;
   border-radius: 999px;
   border: 1px solid rgba(191, 159, 212, 0.26);
   background: linear-gradient(
@@ -47,10 +48,10 @@
 /* Sliding indicator behind the active segment */
 .view-toggle-indicator {
   position: absolute;
-  top: 4px;
-  bottom: 4px;
-  left: 4px;
-  width: calc(50% - 4px);
+  top: 3px;
+  bottom: 3px;
+  left: 3px;
+  width: calc(50% - 3px);
   border-radius: 999px;
   background: linear-gradient(
     180deg,
@@ -74,10 +75,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  min-width: 90px;
-  min-height: 40px; /* + 4px group padding + 1px border = 50px group tap target */
-  padding: 6px 14px;
+  gap: 7px;
+  min-width: 88px;
+  min-height: 26px; /* + 3px group padding + 1px border = 34px, like the game toggle */
+  padding: 4px 14px;
   border: 0;
   border-radius: 999px;
   background: transparent;
@@ -150,9 +151,9 @@
 
 @media (max-width: 480px) {
   .view-toggle-option {
-    min-width: 80px;
-    padding: 6px 10px;
-    gap: 7px;
+    min-width: 78px;
+    padding: 4px 10px;
+    gap: 6px;
     letter-spacing: 0.8px;
   }
 }

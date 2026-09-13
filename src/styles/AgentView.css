@@ -4,7 +4,7 @@
    and inline code rendered as small chips. */
 .agent-view {
   width: 100%;
-  max-width: 76ch;
+  max-width: min(100ch, 1040px);
   margin: 0 auto;
   padding: 96px 24px 120px;
   box-sizing: border-box;

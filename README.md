@@ -66,7 +66,7 @@ curl -H "Accept: text/markdown" https://bafnaaharsh.netlify.app/
 
 - **`netlify.toml`** — `npm run build`, publish `dist/`, Node 22. Netlify builds straight from the repo; no environment variables or secrets are used.
 - **`_redirects`** (generated) — one `200` rewrite per real route, then `/* /404.html 404` so unknown paths are a genuine 404 rather than a soft SPA one.
-- **`public/_headers`** — `nosniff` and `Referrer-Policy` everywhere, the `Link:` alternates, content types + CORS + `max-age=3600` for the agent endpoints, immutable caching for hashed `/assets/*`.
+- **`public/_headers`** — `nosniff` and `Referrer-Policy` everywhere, the `Link:` alternates, content types + CORS + `max-age=3600` for the agent endpoints, and immutable caching for the content-hashed `/assets/*.js` and `*.css` only — images keep their filenames, so they stay revalidatable.
 - **Edge functions** — `markdown-negotiation.ts` (Accept negotiation) and `api-catalog.ts` (guarantees `application/linkset+json` on the extensionless well-known path).
 - `npm run dev` and `vite preview` serve the app only — only **`netlify serve`** runs the redirects, headers and edge functions locally.
 

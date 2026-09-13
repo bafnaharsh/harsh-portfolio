@@ -39,8 +39,26 @@ const calculateSize = (width) => {
 // The fly-in's active window: past this every particle's `isActive` is false,
 // so the image can no longer change on its own.
 const FLYIN_SECONDS = 3.0;
-// A frame that took longer than this means something else owns the main thread.
-const SLOW_FRAME_MS = 20;
+// A frame gap of two or more frames means something else owns the main thread;
+// only then is it worth repainting every other frame (at 20ms the toggle itself
+// read as a stutter on otherwise smooth machines).
+const SLOW_FRAME_MS = 34;
+// A gap longer than this is a stall (font-swap relayout, chunk parse, GC), not
+// a slow frame. The easing is clock-driven, so instead of letting the particles
+// jump ahead when frames resume, the clock is paused for the stalled time.
+const HITCH_MS = 40;
+const FRAME_MS = 1000 / 60;
+
+// Resolves once the web fonts have settled (or after a short timeout), so the
+// fly-in starts after the font-swap relayouts rather than being interrupted by
+// them. On repeat visits the fonts are cached and this resolves immediately.
+const whenFontsSettled = () => {
+  if (typeof document === "undefined" || !document.fonts?.ready) return Promise.resolve();
+  return Promise.race([
+    document.fonts.ready.catch(() => {}),
+    new Promise((resolve) => setTimeout(resolve, 1200)),
+  ]);
+};
 
 // Every particle has its own alpha, so the old loop assigned ctx.fillStyle -
 // building a fresh "rgba(...)" string - once per particle per frame: ~2665
@@ -186,8 +204,13 @@ const AsciiPortrait = () => {
     const apply = (data) => {
       if (cancelled) return;
       particlesRef.current = createParticles(data);
-      startTimeRef.current = performance.now();
-      if (kickRef.current) kickRef.current();
+      // Not started yet: draw() idles until the clock is set below.
+      startTimeRef.current = null;
+      whenFontsSettled().then(() => {
+        if (cancelled) return;
+        startTimeRef.current = performance.now();
+        if (kickRef.current) kickRef.current();
+      });
     };
 
     // 1. Memory cache (also seeded from the lazily-loaded static data).
@@ -258,26 +281,34 @@ const AsciiPortrait = () => {
 
       const particles = particlesRef.current;
       const n = particles.length;
-      if (!n) {
+      if (!n || startTimeRef.current === null) {
+        // No data yet, or data present but the fly-in has not been started
+        // (waiting for fonts): stay blank and idle; the kick restarts the loop.
         ctx.clearRect(0, 0, size, size);
+        prevFrameAt = 0;
         return;
       }
 
       const mouse = mouseRef.current;
       const mouseTarget = mouseTargetRef.current;
       const now = performance.now();
-      const elapsed = (now - startTimeRef.current) / 1000;
 
-      // While the main thread is still contended - which on a cold load is
-      // exactly when the fly-in runs - keep simulating every frame but repaint
-      // only every second one. That drops the clear + ~2400 fillText calls from
-      // half the frames without touching the physics, so positions, timings and
-      // the settled image are bit-for-bit what they were; the fly-in just stops
-      // fighting React's first render for the thread. Above FLYIN_SECONDS every
-      // particle is past its active window, so the settled frame is never the
-      // one that gets skipped (and `resting` cannot be true below it).
       const frameGap = prevFrameAt ? now - prevFrameAt : 0;
       prevFrameAt = now;
+      // Stall: pause the animation clock for the missing time so the easing
+      // resumes where it left off instead of jumping ahead (the visible jitter).
+      // Only matters while something is still time-driven (fly-in + settle).
+      if (frameGap > HITCH_MS && now - startTimeRef.current < (FLYIN_SECONDS + 1.5) * 1000) {
+        startTimeRef.current += frameGap - FRAME_MS;
+      }
+      const elapsed = (now - startTimeRef.current) / 1000;
+
+      // While the main thread is genuinely contended (frames of two or more
+      // vsyncs) keep simulating every frame but repaint only every second one.
+      // That drops the clear + ~2400 fillText calls from half the frames without
+      // touching the physics. Above FLYIN_SECONDS every particle is past its
+      // active window, so the settled frame is never the one that gets skipped
+      // (and `resting` cannot be true below it).
       let paint = true;
       if (elapsed < FLYIN_SECONDS && frameGap > SLOW_FRAME_MS) {
         paintToggle = !paintToggle;

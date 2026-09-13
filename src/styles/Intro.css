@@ -61,14 +61,6 @@
   font-size: 80px;
 }
 
-.intro-subtitle {
-  font-family: "NTR", sans-serif;
-  color: var(--slate);
-  text-align: left;
-  font-weight: 300;
-  font-size: 60px;
-}
-
 .intro-desc {
   color: var(--slate);
   font-family: "NTR", sans-serif;
@@ -173,10 +165,6 @@
     font-size: 72px;
   }
 
-  .intro-subtitle {
-    font-size: 36px;
-  }
-
   .intro-desc {
     font-size: 20px;
   }
@@ -210,12 +198,6 @@
     font-size: 56px;
   }
 
-  .intro-subtitle {
-    text-align: center;
-    font-size: 28px;
-    display: none;
-  }
-
   .intro-desc {
     text-align: center;
     font-size: 16px;
@@ -245,10 +227,6 @@
   .intro-title,
   .intro-name {
     font-size: 40px;
-  }
-
-  .intro-subtitle {
-    font-size: 20px;
   }
 
   .intro-desc {

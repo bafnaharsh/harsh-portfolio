@@ -26,22 +26,6 @@
   margin-bottom: 16px;
 }
 
-.cert-block-hint {
-  margin-top: 14px;
-  font-family: "NTR", sans-serif;
-  font-size: 13px;
-  color: var(--slate);
-}
-
-.cert-block-hint code {
-  font-family: "SFMono-Regular", Consolas, monospace;
-  color: var(--green-bright);
-  background-color: var(--light-navy);
-  padding: 1px 6px;
-  border-radius: 4px;
-  font-size: 12px;
-}
-
 .cert-pills {
   display: flex;
   flex-wrap: wrap;

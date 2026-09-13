@@ -153,21 +153,6 @@
   border-top: 1px solid rgba(100, 255, 218, 0.1);
 }
 
-.robot-game-info-close {
-  position: absolute;
-  top: 7px;
-  right: 9px;
-  background: none;
-  border: none;
-  color: var(--slate);
-  font-size: 15px;
-  cursor: pointer;
-  padding: 0 2px;
-  line-height: 1;
-  transition: color 0.15s;
-}
-.robot-game-info-close:hover { color: var(--green-bright); }
-
 .robot-game-status {
   position: fixed;
   top: 50%;

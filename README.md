@@ -93,7 +93,6 @@ netlify serve      # builds, then serves the full stack at http://localhost:8888
 | `npm run verify`                     | Playwright route + game-mode regression check — needs the site **already running** (`scripts/verify.mjs [baseUrl]`, default `http://localhost:8888`) |
 | `node scripts/optimize-images.mjs`   | Re-encode images to WebP (`--dry-run` reports only, `--dims <file…>` prints pixel sizes) |
 | `node scripts/generate-previews.mjs` | Regenerate the hover-preview thumbnails in `public/previews/` (`--headed` to watch) |
-| `node scripts/pack-ascii-data.mjs`   | Re-pack `src/assets/asciiData.js` from the portrait image data              |
 
 ## ✏️ Editing content
 

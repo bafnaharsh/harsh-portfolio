@@ -26,14 +26,12 @@ loadAsciiData().catch(() => {});
 // src/assets/asciiData.js, which stores glyphs as indices into this string.
 const CHARS = " .:-=+*#%@".split("");
 
+// Canvas size by viewport width. Only these three sizes exist in the
+// pre-computed particle data (see src/assets/asciiData.js).
 const calculateSize = (width) => {
-  if (width <= 480) {
-    return Math.min(220, width - 40);
-  } else if (width <= 768) {
-    return Math.min(280, width - 60);
-  } else {
-    return 400;
-  }
+  if (width <= 480) return 220;
+  if (width <= 768) return 280;
+  return 400;
 };
 
 // The fly-in's active window: past this every particle's `isActive` is false,
@@ -114,70 +112,6 @@ const createParticles = (data) => {
   return particles;
 };
 
-const processImage = (img, targetSize) => {
-  const canvasWidth = targetSize;
-  const canvasHeight = targetSize;
-  const offscreen = document.createElement("canvas");
-  const offCtx = offscreen.getContext("2d");
-  offscreen.width = canvasWidth;
-  offscreen.height = canvasHeight;
-
-  const scale = 0.8;
-  const imgAspect = img.width / img.height;
-
-  let drawHeight = canvasHeight * scale;
-  let drawWidth = drawHeight * imgAspect;
-
-  if (drawWidth > canvasWidth * scale) {
-    drawWidth = canvasWidth * scale;
-    drawHeight = drawWidth / imgAspect;
-  }
-
-  const offsetX = (canvasWidth - drawWidth) / 2;
-  const offsetY = (canvasHeight - drawHeight) / 2;
-
-  offCtx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
-  const imageData = offCtx.getImageData(0, 0, canvasWidth, canvasHeight);
-  const pixels = imageData.data;
-
-  const xs = [];
-  const ys = [];
-  const chars = [];
-  const alphas = [];
-  const isMobileSize = targetSize <= 280;
-  const fontSize = isMobileSize ? 5 : 7;
-  const colGap = fontSize * 0.7;
-  const rowGap = fontSize * 1.1;
-
-  for (let y = 0; y < canvasHeight; y += rowGap) {
-    for (let x = 0; x < canvasWidth; x += colGap) {
-      const i = (Math.floor(y) * canvasWidth + Math.floor(x)) * 4;
-      const a = pixels[i + 3];
-
-      if (a > 128) {
-        const r = pixels[i];
-        const g = pixels[i + 1];
-        const b = pixels[i + 2];
-        const brightness = (r + g + b) / (3 * 255);
-
-        xs.push(Number(x.toFixed(1)));
-        ys.push(Number(y.toFixed(1)));
-        chars.push(Math.floor(brightness * (CHARS.length - 1)));
-        alphas.push(Number((0.4 + brightness * 0.6).toFixed(2)));
-      }
-    }
-  }
-
-  // Same shape as getAsciiParticles() so both paths feed createParticles().
-  return {
-    count: xs.length,
-    x: Float64Array.from(xs),
-    y: Float64Array.from(ys),
-    charIndex: Uint8Array.from(chars),
-    alpha: Float64Array.from(alphas),
-  };
-};
-
 const AsciiPortrait = () => {
   const canvasRef = useRef(null);
   const mouseRef = useRef({ x: -1000, y: -1000, active: false });
@@ -213,32 +147,18 @@ const AsciiPortrait = () => {
       });
     };
 
-    // 1. Memory cache (also seeded from the lazily-loaded static data).
+    // Decoded once per size and kept for remounts / resizes.
     if (memoryCache[size]) {
       apply(memoryCache[size]);
       return;
     }
 
-    // 2. Lazily loaded pre-computed data.
     loadAsciiData().then(({ getAsciiParticles }) => {
       if (cancelled) return;
       const data = getAsciiParticles(size);
-      if (data) {
-        memoryCache[size] = data;
-        apply(data);
-        return;
-      }
-
-      // 3. Fallback to on-the-fly image processing for unknown sizes.
-      const img = new Image();
-      img.crossOrigin = "Anonymous";
-      img.src = "/profile.webp";
-      img.onload = () => {
-        if (cancelled) return;
-        const processed = processImage(img, size);
-        memoryCache[size] = processed;
-        apply(processed);
-      };
+      if (!data) return; // every size calculateSize() can return is precomputed
+      memoryCache[size] = data;
+      apply(data);
     });
 
     return () => {

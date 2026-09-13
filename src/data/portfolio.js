@@ -33,7 +33,6 @@ export const portfolio = {
     ],
     email: "harshbafna29@gmail.com",
     avatar: "/profile.webp",
-    avatarAlt: "Harsh Bafna",
     aboutImage: "/assets/about-harsh.webp",
     aboutImageWidth: 600,
     aboutImageHeight: 600,
@@ -78,7 +77,6 @@ export const portfolio = {
     resume: "/HarshBafna.pdf",
     email: "mailto:harshbafna29@gmail.com",
     quantiphi: "https://quantiphi.com/",
-    jpmorgan: "https://www.jpmorganchase.com/",
   },
 
   // JobList.jsx `experienceItems`, in display order
@@ -308,9 +306,6 @@ export const portfolio = {
 // ---------------------------------------------------------------------------
 // Derived helpers shared by the UI and the build script.
 // ---------------------------------------------------------------------------
-
-export const getCertificateBySlug = (slug) =>
-  portfolio.certifications.find((c) => c.slug === slug);
 
 /** Every real, indexable route on the site, derived from the data. */
 export const routes = () => [

@@ -19,7 +19,8 @@ const linkedinShot = { src: "/previews/linkedin.webp", width: 560, height: 350 }
 
 // `sectionLinks` — the Home/About/… anchors into the human page. Turned off
 // in the Agent view, where the markdown document is the whole page.
-const NavBar = ({ sectionLinks = true }) => {
+// `brandHref` — where the name in the corner goes ("/" or "/?view=agent").
+const NavBar = ({ sectionLinks = true, brandHref = "/" }) => {
   const [expanded, setExpanded] = useState(false);
   const scrollPos = useRef(0);
 
@@ -50,7 +51,7 @@ const NavBar = ({ sectionLinks = true }) => {
       onToggle={(isExpanded) => setExpanded(isExpanded)}
     >
             <Container>
-        <Navbar.Brand href="/">{profile.name}</Navbar.Brand>
+        <Navbar.Brand href={brandHref}>{profile.name}</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto" onSelect={() => setExpanded(false)}>

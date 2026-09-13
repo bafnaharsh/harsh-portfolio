@@ -62,7 +62,9 @@ function App() {
     <div className="App">
       {knownRoute && <ScrollProgress />}
       {/* The agent view is a single document: no section links to the human page. */}
-      {knownRoute && <NavBar sectionLinks={!isAgent} />}
+      {knownRoute && (
+        <NavBar sectionLinks={!isAgent} brandHref={isAgent ? "/?view=agent" : "/"} />
+      )}
       {showGame && (
         <div className="game-toggle-fixed">
           <div className="game-toggle-row">

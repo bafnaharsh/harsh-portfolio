@@ -26,7 +26,9 @@ const AgentView = ({ pathname }) => {
   const [copied, setCopied] = useState(false);
   const markdown = useMemo(() => renderRouteMarkdown(portfolio, pathname), [pathname]);
   // The document this bar describes: "/" for the profile, "/resume", etc.
-  const route = (pathname || "/").replace(/\/+$/, "") || "/";
+  const cleanPath = (pathname || "/").replace(/\/+$/, "") || "/";
+  // Label shown next to "markdown · text/markdown": the agent home reads /agent.
+  const route = cleanPath === "/" ? "/agent" : cleanPath;
 
   const copy = async () => {
     try {

@@ -14,6 +14,11 @@ const FRICTION       = 0.82;
 const BLOCK_H        = 8;
 const SPAWN_INTERVAL = 22;
 const CELL_COUNT     = 5;
+// The physics below advance once per tick with no delta time, so the game was
+// designed and tuned at 60 ticks/s. Gate ticks to that rate so 120/144 Hz
+// displays (or a lighter page that now hits full refresh rate) don't make the
+// avatar fall and move faster than intended.
+const TICK_MS        = 1000 / 60;
 
 function drawBlob(ctx, x, y, frame, onGround, isIdle) {
   const B  = "#ccd6f6";
@@ -220,6 +225,8 @@ const RobotGame = ({ active }) => {
   const keysRef      = useRef(new Set());
   const jumpLatchRef = useRef(false);
   const frameRef     = useRef(0);
+  const lastTickRef  = useRef(0);
+  const tickAccRef   = useRef(0);
 
   const [gameStatus,      setGameStatus]      = useState("playing");
   const [restartKey,      setRestartKey]      = useState(0);
@@ -261,6 +268,8 @@ const RobotGame = ({ active }) => {
 
     const nb = getNavbarBottom();
     frameRef.current = 0;
+    lastTickRef.current = performance.now();
+    tickAccRef.current = 0;
     setCellsCollected(0);
 
     const allDomZones  = [];
@@ -351,6 +360,18 @@ const RobotGame = ({ active }) => {
     const loop = () => {
       const a = blobRef.current;
       if (!a || a.status !== "playing") return;
+
+      // Run at most one physics tick per TICK_MS (≈60/s). On a 60 Hz display
+      // every frame ticks, exactly as before; on faster displays frames are
+      // skipped so the fall, jumps and movement keep their original speed.
+      const now = performance.now();
+      tickAccRef.current += now - lastTickRef.current;
+      lastTickRef.current = now;
+      if (tickAccRef.current < TICK_MS - 1) {
+        animRef.current = requestAnimationFrame(loop);
+        return;
+      }
+      tickAccRef.current = Math.min(Math.max(tickAccRef.current - TICK_MS, 0), TICK_MS);
 
       if (canvas.width  !== window.innerWidth)  canvas.width  = window.innerWidth;
       if (canvas.height !== window.innerHeight) canvas.height = window.innerHeight;

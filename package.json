@@ -1,8 +1,19 @@
 {
   "name": "harsh-portfolio",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Personal portfolio of Harsh Bafna — one data file rendered for people and for AI agents.",
+  "author": "Harsh Bafna",
+  "license": "UNLICENSED",
+  "homepage": "https://bafnaaharsh.netlify.app",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bafnaharsh/harsh-portfolio.git"
+  },
   "type": "module",
+  "engines": {
+    "node": ">=20.19"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build && node scripts/generate-agent-assets.mjs",

@@ -1,6 +1,9 @@
 {
+  "id": "/",
+  "lang": "en",
   "short_name": "Harsh",
-  "name": "Harsh Bafna Portfolio",
+  "name": "Harsh Bafna — Machine Learning Engineer",
+  "description": "Portfolio of Harsh Bafna, a Machine Learning Engineer working on generative AI, multi-agent systems and production LLM applications.",
   "icons": [
     {
       "src": "favicon.ico",
@@ -18,7 +21,8 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": ".",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "theme_color": "#0a192f",
   "background_color": "#0a192f"

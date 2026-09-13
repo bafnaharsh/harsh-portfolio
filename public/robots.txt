@@ -1,62 +1,41 @@
 # https://www.robotstxt.org/robotstxt.html
 # All crawlers, including search engines and AI/LLM bots, are welcome to
 # index and extract content from this site.
+#
+# Content-Signal declares how the content may be used (contentsignals.org):
+#   search=yes    index and show in search and answer engines
+#   ai-input=yes  may be retrieved as grounding context when answering a
+#                 question about Harsh — this is the point of the agent layer
+#   ai-train=no   prefer not to be used as training data
+# These are declared preferences, not access control.
+#
+# A crawler obeys only the most specific group that names it, so the signal is
+# repeated in the named group below rather than inherited from "*".
+
 User-agent: *
 Allow: /
-# Content usage preferences — contentsignals.org
-# search=yes: index and show in search/answer engines.
-# ai-input=yes: may be retrieved as grounding context when answering questions.
-# ai-train=no: prefer not to be used as training data.
 Content-Signal: ai-train=no, search=yes, ai-input=yes
 
-# Explicitly allow common AI/LLM crawlers and answer-engine bots.
+# Explicitly welcomed AI/LLM crawlers and answer-engine bots. Consecutive
+# User-agent lines form one group, so every bot listed here gets both rules.
 User-agent: GPTBot
-Allow: /
-
 User-agent: ChatGPT-User
-Allow: /
-
 User-agent: OAI-SearchBot
-Allow: /
-
 User-agent: ClaudeBot
-Allow: /
-
 User-agent: Claude-Web
-Allow: /
-
 User-agent: anthropic-ai
-Allow: /
-
 User-agent: PerplexityBot
-Allow: /
-
 User-agent: Google-Extended
-Allow: /
-
 User-agent: GoogleOther
-Allow: /
-
 User-agent: Bingbot
-Allow: /
-
 User-agent: CCBot
-Allow: /
-
 User-agent: Applebot
-Allow: /
-
 User-agent: Applebot-Extended
-Allow: /
-
 User-agent: FacebookBot
-Allow: /
-
 User-agent: LinkedInBot
-Allow: /
-
 User-agent: Diffbot
 Allow: /
+Content-Signal: ai-train=no, search=yes, ai-input=yes
 
 Sitemap: https://bafnaaharsh.netlify.app/sitemap.xml
 

@@ -1,7 +1,11 @@
 # Netlify build + runtime configuration.
+#
 # Publish directory (the folder Netlify actually uploads) is dist/.
-# Redirect and header rules live in public/_redirects and public/_headers,
-# which Vite copies into dist/ verbatim.
+# Header rules come from public/_headers, which Vite copies into dist/ verbatim.
+# Redirect rules are generated into dist/_redirects by the build command, from
+# the same route list as the sitemap, so the two can never drift apart.
+# Edge functions are picked up automatically from netlify/edge-functions/; each
+# one declares the paths it handles in its own exported `config`.
 
 [build]
   command = "npm run build"

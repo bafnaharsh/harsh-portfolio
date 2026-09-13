@@ -48,6 +48,22 @@
 /.well-known/agent-skills/:skill/SKILL.md
   Content-Type: text/markdown; charset=utf-8
 
-# Hashed build assets never change
-/assets/*
+# Vite writes content-hashed JS/CSS into /assets/, so those filenames can never
+# point at different bytes and are safe to cache forever.
+/assets/*.js
   Cache-Control: public, max-age=31536000, immutable
+
+/assets/*.css
+  Cache-Control: public, max-age=31536000, immutable
+
+# public/assets/* keeps its original filenames, so replacing a photo reuses its
+# URL. These must stay revalidatable or visitors would hold the old image.
+/assets/photography/*
+  Cache-Control: public, max-age=86400, must-revalidate
+
+/assets/about-harsh.webp
+  Cache-Control: public, max-age=86400, must-revalidate
+
+# Hover-preview thumbnails: same reasoning, regenerated in place.
+/previews/*
+  Cache-Control: public, max-age=86400, must-revalidate

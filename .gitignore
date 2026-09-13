@@ -12,6 +12,12 @@ dist
 dist-ssr
 *.local
 
+# Local environment files. Vite inlines every VITE_* variable into the public
+# bundle, so nothing secret belongs in them and none of them belong in git.
+.env
+.env.*
+!.env.example
+
 # Netlify CLI local state
 .netlify
 deno.lock

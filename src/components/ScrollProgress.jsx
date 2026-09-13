@@ -15,7 +15,11 @@ const ScrollProgress = () => {
       const docHeight =
         document.documentElement.scrollHeight - window.innerHeight;
       const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-      setProgress(Math.min(100, Math.max(0, pct)));
+      // Quantise to 0.25% so a scroll that barely moves does not re-render
+      // (React bails out when the value is unchanged). 0.25% of a 1280px bar
+      // is ~3px, below what the eye reads as stepping.
+      const quantised = Math.round(Math.min(100, Math.max(0, pct)) * 4) / 4;
+      setProgress((prev) => (prev === quantised ? prev : quantised));
     };
 
     // Coalesce scroll events into one rAF-driven state update per frame.

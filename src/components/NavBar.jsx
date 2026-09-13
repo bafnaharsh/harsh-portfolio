@@ -13,6 +13,10 @@ const { profile, links } = portfolio;
 const emailAddress = links.email.replace(/^mailto:/i, "");
 const prettyUrl = (url) => url.replace(/^https?:\/\//i, "").replace(/\/+$/, "");
 
+// Thumbnails of the pages these links open — see scripts/generate-previews.mjs.
+const githubShot = { src: "/previews/github.webp", width: 560, height: 350 };
+const linkedinShot = { src: "/previews/linkedin.webp", width: 560, height: 350 };
+
 const NavBar = () => {
   const [expanded, setExpanded] = useState(false);
   const scrollPos = useRef(0);
@@ -67,6 +71,8 @@ const NavBar = () => {
               title="GitHub"
               detail={prettyUrl(links.github)}
               hint="opens in a new tab"
+              image={githubShot}
+              chromeUrl={prettyUrl(links.github)}
               placement="bottom"
             >
               <Nav.Link
@@ -82,6 +88,8 @@ const NavBar = () => {
               title="LinkedIn"
               detail={prettyUrl(links.linkedin)}
               hint="opens in a new tab"
+              image={linkedinShot}
+              chromeUrl={prettyUrl(links.linkedin)}
               placement="bottom"
             >
               <Nav.Link

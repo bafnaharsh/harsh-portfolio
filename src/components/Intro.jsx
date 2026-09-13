@@ -7,13 +7,14 @@ import FadeInSection from "./FadeInSection";
 import AsciiPortrait from "./AsciiPortrait";
 import PdfViewerModal from "./PdfViewerModal";
 import HoverPreview from "./HoverPreview";
-import { portfolio, routes } from "../data/portfolio";
+import { portfolio } from "../data/portfolio";
 
 const { profile, links } = portfolio;
 
 // Display forms derived from the data — nothing here is hardcoded.
 const emailAddress = links.email.replace(/^mailto:/i, "");
-const resumePath = routes().find((route) => route.path.endsWith("resume"))?.path ?? links.resume;
+// First page of public/HarshBafna.pdf — see scripts/generate-previews.mjs.
+const resumeShot = { src: "/previews/resume.webp", width: 396, height: 560 };
 
 const Intro = () => {
   const [showResume, setShowResume] = useState(false);
@@ -42,9 +43,9 @@ const Intro = () => {
               </a>
             </HoverPreview>
             <HoverPreview
-              title="Résumé"
+              title="Resume"
               detail="PDF · opens in a viewer here"
-              note={`shareable link: ${resumePath}`}
+              image={resumeShot}
               placement="top"
             >
               <button

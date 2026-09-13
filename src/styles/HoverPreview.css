@@ -49,6 +49,90 @@
   }
 }
 
+/* Cards that carry a thumbnail are a little wider than the text-only ones.
+   HoverPreview.jsx clamps the inline max-width to `viewport - 24` on top of
+   this, so nothing ever overflows a narrow screen. */
+.hover-preview[data-media="true"] {
+  gap: 4px;
+  /* A fixed width keeps the three image cards identical; `max-width` (set
+     inline from JS) still wins on a narrow screen, so this never overflows. */
+  width: 306px;
+  max-width: 306px;
+  padding: 8px;
+}
+
+.hover-preview[data-media="true"] .hover-preview-title,
+.hover-preview[data-media="true"] .hover-preview-detail,
+.hover-preview[data-media="true"] .hover-preview-hint,
+.hover-preview[data-media="true"] .hover-preview-note {
+  padding-inline: 4px;
+}
+
+.hover-preview[data-media="true"] .hover-preview-title {
+  margin-top: 4px;
+}
+
+/* Thumbnail frame — the same navy glass border as the card itself. */
+.hover-preview-media {
+  display: block;
+  overflow: hidden;
+  width: 288px;
+  max-width: 100%;
+  border: 1px solid rgba(100, 255, 218, 0.25);
+  border-radius: 7px;
+  background: rgba(2, 12, 27, 0.6);
+}
+
+/* The résumé page is portrait — narrower and centred inside the card. */
+.hover-preview-media[data-orient="portrait"] {
+  width: 200px;
+  margin-inline: auto;
+}
+
+.hover-preview-img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Fake browser chrome, so the card reads as "this is the tab you will open". */
+.hover-preview-chrome {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-sizing: border-box;
+  width: 100%;
+  height: 18px;
+  padding: 0 7px;
+  border-bottom: 1px solid rgba(100, 255, 218, 0.18);
+  background: rgba(23, 42, 69, 0.95);
+  overflow: hidden;
+}
+
+/* One dot plus two more drawn with box-shadow — no extra elements. */
+.hover-preview-dots {
+  flex: none;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(136, 146, 176, 0.75);
+  box-shadow:
+    6px 0 0 rgba(136, 146, 176, 0.75),
+    12px 0 0 rgba(136, 146, 176, 0.75);
+}
+
+.hover-preview-url {
+  flex: 1 1 auto;
+  margin-left: 6px;
+  color: var(--slate, #8892b0);
+  font-size: 10px;
+  line-height: 18px;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .hover-preview-title {
   color: var(--green-bright, #64ffda);
   font-size: 14px;

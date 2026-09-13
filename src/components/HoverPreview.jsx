@@ -12,14 +12,20 @@ import "../styles/HoverPreview.css";
 const OPEN_DELAY = 150; // ms before the card appears
 const EDGE = 12; // min gap to the viewport edge
 const GAP = 10; // distance between trigger and card
-const MAX_WIDTH = 260;
+const MAX_WIDTH = 260; // text-only card
+const MAX_WIDTH_MEDIA = 306; // card with a thumbnail (288px image + 8px padding)
 
 const canHover = () =>
   typeof window !== "undefined" &&
   typeof window.matchMedia === "function" &&
   window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
-const HoverPreview = ({ title, detail, hint, note, placement = "bottom", children }) => {
+// `image` is optional: { src, width, height, alt }. width/height are the file's
+// natural pixel size — they reserve the right box before the lazy image decodes,
+// and their ratio decides whether the thumbnail is laid out landscape (a page
+// screenshot) or portrait (the résumé page).
+// `chromeUrl` draws a fake browser-tab strip with the URL above the image.
+const HoverPreview = ({ title, detail, hint, note, image, chromeUrl, placement = "bottom", children }) => {
   const rawId = useId();
   const id = `hover-preview-${rawId.replace(/[^a-zA-Z0-9_-]/g, "")}`;
   const triggerRef = useRef(null);
@@ -55,7 +61,8 @@ const HoverPreview = ({ title, detail, hint, note, placement = "bottom", childre
     const vh = document.documentElement.clientHeight;
 
     // Clamp the width first so the measurement below is the final one.
-    card.style.maxWidth = `${Math.max(120, Math.min(MAX_WIDTH, vw - EDGE * 2))}px`;
+    const cap = image ? MAX_WIDTH_MEDIA : MAX_WIDTH;
+    card.style.maxWidth = `${Math.max(120, Math.min(cap, vw - EDGE * 2))}px`;
 
     const t = trigger.getBoundingClientRect();
     const { width: w, height: h } = card.getBoundingClientRect();
@@ -64,7 +71,10 @@ const HoverPreview = ({ title, detail, hint, note, placement = "bottom", childre
     if (side === "top" && t.top - GAP - h < EDGE && t.bottom + GAP + h <= vh - EDGE) side = "bottom";
     else if (side === "bottom" && t.bottom + GAP + h > vh - EDGE && t.top - GAP - h >= EDGE) side = "top";
 
-    const top = side === "top" ? t.top - GAP - h : t.bottom + GAP;
+    // Taller image cards can outgrow both sides on a short viewport, so the
+    // vertical offset is clamped too — the card always stays fully on screen.
+    const wanted = side === "top" ? t.top - GAP - h : t.bottom + GAP;
+    const top = Math.max(EDGE, Math.min(wanted, vh - EDGE - h));
     const centered = t.left + t.width / 2 - w / 2;
     const left = Math.max(EDGE, Math.min(centered, vw - EDGE - w));
     const caret = Math.max(14, Math.min(t.left + t.width / 2 - left, Math.max(w - 14, 14)));
@@ -74,7 +84,7 @@ const HoverPreview = ({ title, detail, hint, note, placement = "bottom", childre
     card.style.setProperty("--hp-caret", `${Math.round(caret)}px`);
     card.dataset.side = side;
     card.dataset.ready = "true";
-  }, [placement]);
+  }, [placement, image]);
 
   useLayoutEffect(() => {
     if (open) position();
@@ -136,7 +146,36 @@ const HoverPreview = ({ title, detail, hint, note, placement = "bottom", childre
       />
       {open &&
         createPortal(
-          <span className="hover-preview" id={id} role="tooltip" ref={cardRef}>
+          <span
+            className="hover-preview"
+            id={id}
+            role="tooltip"
+            ref={cardRef}
+            data-media={image ? "true" : undefined}
+          >
+            {image ? (
+              <span
+                className="hover-preview-media"
+                data-orient={image.height > image.width ? "portrait" : "landscape"}
+              >
+                {chromeUrl ? (
+                  <span className="hover-preview-chrome" aria-hidden="true">
+                    <span className="hover-preview-dots" />
+                    <span className="hover-preview-url">{chromeUrl}</span>
+                  </span>
+                ) : null}
+                {/* Decorative: the title/detail below already name the target. */}
+                <img
+                  className="hover-preview-img"
+                  src={image.src}
+                  width={image.width}
+                  height={image.height}
+                  alt={image.alt ?? ""}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </span>
+            ) : null}
             <span className="hover-preview-title">{title}</span>
             {detail ? <span className="hover-preview-detail">{detail}</span> : null}
             {hint ? <span className="hover-preview-hint">{hint}</span> : null}

@@ -136,10 +136,23 @@ const BackToTop = () => {
       Math.max(duration, SENT_STATE_MS)
     );
 
+    // What we left the scroll position at on the previous frame, so we can tell
+    // our own movement from someone else's. -1 until the first frame has run.
+    let expected = -1;
+
     const step = (now) => {
+      // Something other than this animation moved the page since the last frame
+      // — game mode's scrollTo(0, 0), a scrollbar drag, an anchor jump. Hand
+      // control straight back rather than dragging the viewport back onto our
+      // curve, which would otherwise keep scrolling underneath the new owner.
+      if (expected >= 0 && Math.abs(window.scrollY - expected) > 2) {
+        cancel();
+        return;
+      }
       const t = Math.min(1, (now - startTime) / duration);
       if (t < 1) {
         window.scrollTo(0, start * (1 - easeInOutCubic(t)));
+        expected = window.scrollY; // read back, so clamping/rounding is ours too
         rafRef.current = requestAnimationFrame(step);
         return;
       }

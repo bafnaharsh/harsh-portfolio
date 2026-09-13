@@ -17,7 +17,9 @@ const prettyUrl = (url) => url.replace(/^https?:\/\//i, "").replace(/\/+$/, "");
 const githubShot = { src: "/previews/github.webp", width: 560, height: 350 };
 const linkedinShot = { src: "/previews/linkedin.webp", width: 560, height: 350 };
 
-const NavBar = () => {
+// `sectionLinks` — the Home/About/… anchors into the human page. Turned off
+// in the Agent view, where the markdown document is the whole page.
+const NavBar = ({ sectionLinks = true }) => {
   const [expanded, setExpanded] = useState(false);
   const scrollPos = useRef(0);
 
@@ -52,12 +54,16 @@ const NavBar = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto" onSelect={() => setExpanded(false)}>
-            <Nav.Link href="/#intro">Home</Nav.Link>
-            <Nav.Link href="/#about">About</Nav.Link>
-            <Nav.Link href="/#experience">Experience</Nav.Link>
-            <Nav.Link href="/#projects">Software & Certifications</Nav.Link>
-            <Nav.Link href="/#education">Education</Nav.Link>
-            <Nav.Link href="/#photography">Photography</Nav.Link>
+            {sectionLinks && (
+              <>
+                <Nav.Link href="/#intro">Home</Nav.Link>
+                <Nav.Link href="/#about">About</Nav.Link>
+                <Nav.Link href="/#experience">Experience</Nav.Link>
+                <Nav.Link href="/#projects">Software & Certifications</Nav.Link>
+                <Nav.Link href="/#education">Education</Nav.Link>
+                <Nav.Link href="/#photography">Photography</Nav.Link>
+              </>
+            )}
           </Nav>
           <Nav className="ms-auto" onSelect={() => setExpanded(false)}>
             {/* Icon-only links: the MUI icons are aria-hidden, so each link

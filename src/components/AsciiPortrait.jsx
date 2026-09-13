@@ -3,12 +3,15 @@ import React, { useRef, useEffect, useState } from "react";
 // Module-level cache to persist between remounts
 const memoryCache = {};
 
-// The pre-computed ASCII particle data is ~290KB, so it is loaded lazily and
-// cached on first use instead of being bundled into the initial payload.
+// The pre-computed ASCII particle data is loaded lazily and cached on first use
+// instead of being bundled into the initial payload. It is stored as one base64
+// blob per canvas size (see scripts/pack-ascii-data.mjs): the chunk went from
+// 238 kB / 30 kB-gzip of object literals to 55 kB / 11 kB-gzip of strings, and
+// only the size actually on screen is ever decoded into arrays.
 let asciiDataPromise = null;
 const loadAsciiData = () => {
   if (!asciiDataPromise) {
-    asciiDataPromise = import("../assets/asciiData").then((m) => m.asciiData);
+    asciiDataPromise = import("../assets/asciiData");
   }
   return asciiDataPromise;
 };
@@ -19,9 +22,9 @@ const loadAsciiData = () => {
 // is what made the portrait visibly pop in after the rest of the hero.
 loadAsciiData().catch(() => {});
 
-// ASCII character set from sparse to dense
+// ASCII character set from sparse to dense. Kept in sync with ASCII_CHARS in
+// src/assets/asciiData.js, which stores glyphs as indices into this string.
 const CHARS = " .:-=+*#%@".split("");
-const CHAR_INDEX = new Map(CHARS.map((c, i) => [c, i]));
 
 const calculateSize = (width) => {
   if (width <= 480) {
@@ -32,6 +35,12 @@ const calculateSize = (width) => {
     return 400;
   }
 };
+
+// The fly-in's active window: past this every particle's `isActive` is false,
+// so the image can no longer change on its own.
+const FLYIN_SECONDS = 3.0;
+// A frame that took longer than this means something else owns the main thread.
+const SLOW_FRAME_MS = 20;
 
 // Every particle has its own alpha, so the old loop assigned ctx.fillStyle -
 // building a fresh "rgba(...)" string - once per particle per frame: ~2665
@@ -47,24 +56,34 @@ const LEVEL_STYLES = Array.from(
   (_, level) => `rgba(100, 255, 218, ${level / (ALPHA_LEVELS - 1)})`
 );
 
-const createParticlesFromRaw = (rawParticles) =>
-  rawParticles.map((p) => {
+// Takes the decoded structure-of-arrays table and builds the mutable particle
+// objects the render loop mutates in place. Glyph 0 is the space character: it
+// paints nothing, so those entries (~8% of every size) are dropped here instead
+// of being simulated and then skipped 60 times a second. The rendered pixels are
+// identical; only invisible work disappears.
+const createParticles = (data) => {
+  const { count, x: xs, y: ys, charIndex, alpha } = data;
+  const particles = [];
+  for (let i = 0; i < count; i++) {
+    const ci = charIndex[i];
+    if (ci === 0) continue;
+    const x = xs[i];
+    const y = ys[i];
     // The shimmer and "breathing" terms are sin/cos of (time * k + constant).
     // Pre-splitting them with the angle-sum identity turns three transcendental
     // calls per particle per frame into three multiply-adds.
     const shimmer = Math.random() * Math.PI * 2;
-    const phaseY = p.y * 0.1;
-    const phaseX = p.x * 0.1;
-    return {
-      x: p.x + (Math.random() - 0.5) * 400,
-      y: p.y + (Math.random() - 0.5) * 400,
-      targetX: p.x,
-      targetY: p.y,
+    const phaseY = y * 0.1;
+    const phaseX = x * 0.1;
+    particles.push({
+      x: x + (Math.random() - 0.5) * 400,
+      y: y + (Math.random() - 0.5) * 400,
+      targetX: x,
+      targetY: y,
       vx: 0,
       vy: 0,
-      char: p.char,
-      blank: (CHAR_INDEX.get(p.char) || 0) === 0,
-      baseAlpha: p.alpha,
+      char: CHARS[ci],
+      baseAlpha: alpha[i],
       delay: Math.random() * 0.4,
       shCos: Math.cos(shimmer),
       shSin: Math.sin(shimmer),
@@ -72,8 +91,10 @@ const createParticlesFromRaw = (rawParticles) =>
       bySin: Math.sin(phaseY),
       bxCos: Math.cos(phaseX),
       bxSin: Math.sin(phaseX),
-    };
-  });
+    });
+  }
+  return particles;
+};
 
 const processImage = (img, targetSize) => {
   const canvasWidth = targetSize;
@@ -101,7 +122,10 @@ const processImage = (img, targetSize) => {
   const imageData = offCtx.getImageData(0, 0, canvasWidth, canvasHeight);
   const pixels = imageData.data;
 
-  const rawParticles = [];
+  const xs = [];
+  const ys = [];
+  const chars = [];
+  const alphas = [];
   const isMobileSize = targetSize <= 280;
   const fontSize = isMobileSize ? 5 : 7;
   const colGap = fontSize * 0.7;
@@ -117,18 +141,23 @@ const processImage = (img, targetSize) => {
         const g = pixels[i + 1];
         const b = pixels[i + 2];
         const brightness = (r + g + b) / (3 * 255);
-        const charIndex = Math.floor(brightness * (CHARS.length - 1));
 
-        rawParticles.push({
-          x: Number(x.toFixed(1)),
-          y: Number(y.toFixed(1)),
-          char: CHARS[charIndex],
-          alpha: Number((0.4 + brightness * 0.6).toFixed(2)),
-        });
+        xs.push(Number(x.toFixed(1)));
+        ys.push(Number(y.toFixed(1)));
+        chars.push(Math.floor(brightness * (CHARS.length - 1)));
+        alphas.push(Number((0.4 + brightness * 0.6).toFixed(2)));
       }
     }
   }
-  return rawParticles;
+
+  // Same shape as getAsciiParticles() so both paths feed createParticles().
+  return {
+    count: xs.length,
+    x: Float64Array.from(xs),
+    y: Float64Array.from(ys),
+    charIndex: Uint8Array.from(chars),
+    alpha: Float64Array.from(alphas),
+  };
 };
 
 const AsciiPortrait = () => {
@@ -154,25 +183,26 @@ const AsciiPortrait = () => {
   useEffect(() => {
     let cancelled = false;
 
-    const applyRaw = (raw) => {
+    const apply = (data) => {
       if (cancelled) return;
-      particlesRef.current = createParticlesFromRaw(raw);
+      particlesRef.current = createParticles(data);
       startTimeRef.current = performance.now();
       if (kickRef.current) kickRef.current();
     };
 
     // 1. Memory cache (also seeded from the lazily-loaded static data).
     if (memoryCache[size]) {
-      applyRaw(memoryCache[size]);
+      apply(memoryCache[size]);
       return;
     }
 
     // 2. Lazily loaded pre-computed data.
-    loadAsciiData().then((asciiData) => {
+    loadAsciiData().then(({ getAsciiParticles }) => {
       if (cancelled) return;
-      if (asciiData[size]) {
-        memoryCache[size] = asciiData[size];
-        applyRaw(asciiData[size]);
+      const data = getAsciiParticles(size);
+      if (data) {
+        memoryCache[size] = data;
+        apply(data);
         return;
       }
 
@@ -181,9 +211,10 @@ const AsciiPortrait = () => {
       img.crossOrigin = "Anonymous";
       img.src = "/profile.webp";
       img.onload = () => {
-        const raw = processImage(img, size);
-        memoryCache[size] = raw;
-        applyRaw(raw);
+        if (cancelled) return;
+        const processed = processImage(img, size);
+        memoryCache[size] = processed;
+        apply(processed);
       };
     });
 
@@ -219,21 +250,47 @@ const AsciiPortrait = () => {
 
     let rafId = 0;
     let onScreen = true;
+    let prevFrameAt = 0;
+    let paintToggle = false;
 
     const draw = () => {
       rafId = 0;
 
-      ctx.clearRect(0, 0, size, size);
-
       const particles = particlesRef.current;
       const n = particles.length;
-      if (!n) return;
-      if (bucketNext.length < n) bucketNext = new Int32Array(n);
-      bucketHead.fill(-1);
+      if (!n) {
+        ctx.clearRect(0, 0, size, size);
+        return;
+      }
 
       const mouse = mouseRef.current;
       const mouseTarget = mouseTargetRef.current;
-      const elapsed = (performance.now() - startTimeRef.current) / 1000;
+      const now = performance.now();
+      const elapsed = (now - startTimeRef.current) / 1000;
+
+      // While the main thread is still contended - which on a cold load is
+      // exactly when the fly-in runs - keep simulating every frame but repaint
+      // only every second one. That drops the clear + ~2400 fillText calls from
+      // half the frames without touching the physics, so positions, timings and
+      // the settled image are bit-for-bit what they were; the fly-in just stops
+      // fighting React's first render for the thread. Above FLYIN_SECONDS every
+      // particle is past its active window, so the settled frame is never the
+      // one that gets skipped (and `resting` cannot be true below it).
+      const frameGap = prevFrameAt ? now - prevFrameAt : 0;
+      prevFrameAt = now;
+      let paint = true;
+      if (elapsed < FLYIN_SECONDS && frameGap > SLOW_FRAME_MS) {
+        paintToggle = !paintToggle;
+        paint = paintToggle;
+      } else {
+        paintToggle = false;
+      }
+
+      if (paint) {
+        ctx.clearRect(0, 0, size, size);
+        if (bucketNext.length < n) bucketNext = new Int32Array(n);
+        bucketHead.fill(-1);
+      }
 
       mouse.x += (mouseTarget.x - mouse.x) * 0.15;
       mouse.y += (mouseTarget.y - mouse.y) * 0.15;
@@ -242,7 +299,7 @@ const AsciiPortrait = () => {
       const mx = mouse.x;
       const my = mouse.y;
 
-      // Per-frame halves of the angle-sum expansion (see createParticlesFromRaw).
+      // Per-frame halves of the angle-sum expansion (see createParticles).
       const s2 = Math.sin(elapsed * 2);
       const c2 = Math.cos(elapsed * 2);
       const s05 = Math.sin(elapsed * 0.5);
@@ -270,7 +327,7 @@ const AsciiPortrait = () => {
           easedMove = 1 - invMove * invMove * invMove;
         }
 
-        const isActive = mouseActive || particleTime < 3.0;
+        const isActive = mouseActive || particleTime < FLYIN_SECONDS;
         let alpha = p.baseAlpha * easedFade;
         if (isActive) alpha += (s2 * p.shCos + c2 * p.shSin) * 0.1;
 
@@ -318,7 +375,7 @@ const AsciiPortrait = () => {
         p.x += p.vx;
         p.y += p.vy;
 
-        if (p.blank) continue; // blank glyph, nothing to paint
+        if (!paint) continue;
         const level =
           alpha >= 1 ? ALPHA_LEVELS - 1 : alpha > 0 ? Math.round(alpha * (ALPHA_LEVELS - 1)) : 0;
         if (level === 0) continue;
@@ -328,14 +385,16 @@ const AsciiPortrait = () => {
 
       // One fillStyle assignment per occupied alpha level instead of one per
       // particle; the fillText calls themselves are unchanged.
-      for (let level = 1; level < ALPHA_LEVELS; level++) {
-        let i = bucketHead[level];
-        if (i < 0) continue;
-        ctx.fillStyle = LEVEL_STYLES[level];
-        while (i >= 0) {
-          const p = particles[i];
-          ctx.fillText(p.char, p.x, p.y);
-          i = bucketNext[i];
+      if (paint) {
+        for (let level = 1; level < ALPHA_LEVELS; level++) {
+          let i = bucketHead[level];
+          if (i < 0) continue;
+          ctx.fillStyle = LEVEL_STYLES[level];
+          while (i >= 0) {
+            const p = particles[i];
+            ctx.fillText(p.char, p.x, p.y);
+            i = bucketNext[i];
+          }
         }
       }
 
